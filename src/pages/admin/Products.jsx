@@ -164,6 +164,23 @@ function CloseIcon({ size = 20 }) {
   );
 }
 
+function ArrowLeftIcon({ size = 18 }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+  );
+}
+
 /* =========================================================
    STAT CARD
 ========================================================= */
@@ -220,6 +237,7 @@ function ProductModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1F3A]/50 p-4">
       <div className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
+
         {/* HEADER */}
 
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#DCE7F2] bg-white px-6 py-4">
@@ -250,6 +268,7 @@ function ProductModal({
           onSubmit={onSave}
           className="space-y-5 p-6"
         >
+
           {/* PRODUCT NAME */}
 
           <div>
@@ -404,8 +423,7 @@ function ProductModal({
                   alt={form.name || "Product preview"}
                   className="h-full w-full object-contain"
                   onError={(event) => {
-                    event.currentTarget.style.display =
-                      "none";
+                    event.currentTarget.style.display = "none";
                   }}
                 />
               </div>
@@ -546,7 +564,7 @@ export default function Products() {
 
   /* =======================================================
      FILTER CATEGORY LIST
-======================================================= */
+  ======================================================= */
 
   const categories = useMemo(() => {
     const values = products
@@ -696,7 +714,6 @@ export default function Products() {
 
   const handleAddCategory = () => {
     setModalOpen(false);
-
     navigate("/admin/categories");
   };
 
@@ -717,8 +734,6 @@ export default function Products() {
       return;
     }
 
-    /* Check that selected category exists */
-
     const categoryExists =
       activeCategories.some(
         (item) =>
@@ -727,12 +742,6 @@ export default function Products() {
             .toLowerCase() ===
           category.toLowerCase()
       );
-
-    /*
-      When editing an old product whose category
-      has later been made inactive, allow the
-      existing category to remain unchanged.
-    */
 
     const editingOldCategory =
       editingProduct &&
@@ -895,43 +904,37 @@ export default function Products() {
      RENDER
   ======================================================= */
 
-  return (
-    <div className="min-h-screen bg-[#F5FAFF] px-4 py-5 sm:px-6 lg:px-8">
+ return (
+  <div className="min-h-screen bg-[#F5FAFF]">
 
-      <div className="mx-auto max-w-[1500px]">
+    {/* HEADER */}
 
-        {/* HEADER */}
+    <div className="border-b border-[#DCE7F2] bg-white">
+      <div className="mx-auto max-w-[1500px] px-4 py-5 sm:px-6 lg:px-8">
 
-        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
           <div>
-            <div className="flex items-center gap-2 text-sm text-[#5E6B7A]">
 
-              <button
-                type="button"
-                onClick={() =>
-                  navigate("/admin")
-                }
-                className="transition hover:text-[#0078ED]"
-              >
-                Dashboard
-              </button>
+            {/* BACK TO DASHBOARD */}
 
-              <span>/</span>
+            <button
+              type="button"
+              onClick={() => navigate("/admin")}
+              className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-[#5E6B7A] transition hover:text-[#0078ED]"
+            >
+              <ArrowLeftIcon />
+              Back to Dashboard
+            </button>
 
-              <span className="font-medium text-[#0B1F3A]">
-                Products
-              </span>
-
-            </div>
-
-            <h1 className="mt-2 text-2xl font-bold text-[#0B1F3A] sm:text-3xl">
+            <h1 className="text-2xl font-bold text-[#0B1F3A] sm:text-3xl">
               Products
             </h1>
 
             <p className="mt-1 text-sm text-[#5E6B7A]">
               Manage your Karodrop product catalog.
             </p>
+
           </div>
 
           <button
@@ -945,6 +948,14 @@ export default function Products() {
 
         </div>
 
+      </div>
+    </div>
+
+    {/* PAGE CONTENT */}
+
+    <div className="px-4 py-6 sm:px-6 lg:px-8">
+
+      <div className="mx-auto max-w-[1500px]"></div>
         {/* STATS */}
 
         <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -981,8 +992,6 @@ export default function Products() {
 
           <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_220px_180px]">
 
-            {/* SEARCH */}
-
             <div className="relative">
 
               <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7A8795]">
@@ -1002,8 +1011,6 @@ export default function Products() {
               />
 
             </div>
-
-            {/* CATEGORY FILTER */}
 
             <select
               value={categoryFilter}
@@ -1029,8 +1036,6 @@ export default function Products() {
               )}
 
             </select>
-
-            {/* STOCK FILTER */}
 
             <select
               value={stockFilter}
@@ -1177,8 +1182,6 @@ export default function Products() {
                             className="border-b border-[#EEF3F7] transition hover:bg-[#F9FCFF]"
                           >
 
-                            {/* PRODUCT */}
-
                             <td className="px-5 py-4">
 
                               <div className="flex items-center gap-3">
@@ -1230,14 +1233,10 @@ export default function Products() {
 
                             </td>
 
-                            {/* CATEGORY */}
-
                             <td className="px-5 py-4 text-sm text-[#5E6B7A]">
                               {product.category ||
                                 "—"}
                             </td>
-
-                            {/* PRICE */}
 
                             <td className="px-5 py-4 text-sm font-bold text-[#0B1F3A]">
                               {formatCurrency(
@@ -1245,15 +1244,11 @@ export default function Products() {
                               )}
                             </td>
 
-                            {/* STOCK */}
-
                             <td className="px-5 py-4 text-sm font-semibold text-[#0B1F3A]">
                               {Number(
                                 product.stock
                               ) || 0}
                             </td>
-
-                            {/* STATUS */}
 
                             <td className="px-5 py-4">
 
@@ -1266,8 +1261,6 @@ export default function Products() {
                               </span>
 
                             </td>
-
-                            {/* ACTIONS */}
 
                             <td className="px-5 py-4">
 
@@ -1465,7 +1458,6 @@ export default function Products() {
           )}
 
         </div>
-
       </div>
 
       {/* PRODUCT MODAL */}

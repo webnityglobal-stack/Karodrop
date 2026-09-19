@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const COLORS = {
@@ -32,7 +32,7 @@ function readStorage(key) {
 
 function readCurrentUser() {
   try {
-    return JSON.parse(localStorage.getItem("karodrop-user") || "null");
+    return JSON.parse(localStorage.getItem("karodrop-admin") || "null");
   } catch {
     return null;
   }
@@ -100,6 +100,83 @@ function getOrderDate(order) {
     order?.createdOn ||
     null
   );
+}
+
+function getOrderItems(order) {
+  if (Array.isArray(order?.items)) return order.items;
+  if (Array.isArray(order?.products)) return order.products;
+  if (Array.isArray(order?.orderItems)) return order.orderItems;
+  if (Array.isArray(order?.lineItems)) return order.lineItems;
+  if (Array.isArray(order?.cartItems)) return order.cartItems;
+  if (order?.product) return [order.product];
+  return [];
+}
+
+function getItemQuantity(item) {
+  const quantity = Number(
+    item?.quantity ??
+    item?.qty ??
+    item?.count ??
+    1
+  );
+
+  return Number.isFinite(quantity) && quantity > 0
+    ? quantity
+    : 1;
+}
+
+function getProductName(item) {
+  return (
+    item?.productName ||
+    item?.name ||
+    item?.title ||
+    item?.product?.name ||
+    item?.product?.title ||
+    "Product"
+  );
+}
+
+function getProductKey(item) {
+  const id =
+    item?.productId ||
+    item?.product?._id ||
+    item?.product?.id ||
+    item?.id ||
+    item?._id ||
+    item?.sku ||
+    item?.product?.sku;
+
+  if (id) return `id:${String(id)}`;
+
+  const name = getProductName(item)
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+
+  return name && name !== "product"
+    ? `name:${name}`
+    : "";
+}
+
+function getProductImage(item) {
+  return (
+    item?.image ||
+    item?.imageUrl ||
+    item?.productImage ||
+    item?.product?.image ||
+    item?.product?.imageUrl ||
+    ""
+  );
+}
+
+function getProductPrice(product) {
+  return Number(
+    product?.sellingPrice ??
+    product?.price ??
+    product?.salePrice ??
+    product?.mrp ??
+    0
+  ) || 0;
 }
 
 function formatCurrency(value) {
@@ -454,6 +531,7 @@ export default function Dashboard() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const searchInputRef = useRef(null);
 
   useEffect(() => {
     const loadData = () => {
@@ -472,6 +550,7 @@ export default function Dashboard() {
     const events = [
       "storage",
       "userChanged",
+      "usersUpdated",
       "ordersUpdated",
       "brandsUpdated",
       "productsUpdated",
@@ -488,6 +567,21 @@ export default function Dashboard() {
       events.forEach((event) => {
         window.removeEventListener(event, loadData);
       });
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleShortcut = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleShortcut);
+
+    return () => {
+      window.removeEventListener("keydown", handleShortcut);
     };
   }, []);
 
@@ -753,6 +847,93 @@ export default function Dashboard() {
   );
 
   /* =========================
+     TOP SELLING PRODUCTS
+     REAL ORDER ITEM DATA ONLY
+  ========================= */
+
+  const topSellingProducts = useMemo(() => {
+    const salesMap = new Map();
+
+    orders.forEach((order) => {
+      getOrderItems(order).forEach((item) => {
+        const key = getProductKey(item);
+        if (!key) return;
+
+        const quantity = getItemQuantity(item);
+        const existing = salesMap.get(key) || {
+          quantity: 0,
+          item,
+        };
+
+        salesMap.set(key, {
+          quantity: existing.quantity + quantity,
+          item: existing.item,
+        });
+      });
+    });
+
+    const productLookup = new Map();
+
+    products.forEach((product) => {
+      const ids = [
+        product?.id,
+        product?._id,
+        product?.productId,
+        product?.sku,
+        product?.productCode,
+      ]
+        .filter(Boolean)
+        .map((value) => `id:${String(value)}`);
+
+      const name = (
+        product?.name ||
+        product?.title ||
+        ""
+      )
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+
+      if (name) ids.push(`name:${name}`);
+
+      ids.forEach((key) => {
+        if (!productLookup.has(key)) {
+          productLookup.set(key, product);
+        }
+      });
+    });
+
+    return Array.from(salesMap.entries())
+      .map(([key, sale]) => {
+        const product =
+          productLookup.get(key) || sale.item?.product || null;
+
+        return {
+          key,
+          quantity: sale.quantity,
+          product,
+          item: sale.item,
+          name:
+            product?.name ||
+            product?.title ||
+            getProductName(sale.item),
+          image:
+            product?.image ||
+            product?.imageUrl ||
+            getProductImage(sale.item),
+          category:
+            product?.category ||
+            product?.categoryName ||
+            sale.item?.category ||
+            "Product",
+        };
+      })
+      .filter((item) => item.quantity > 0)
+      .sort((a, b) => b.quantity - a.quantity)
+      .slice(0, 5);
+  }, [orders, products]);
+
+  /* =========================
      GLOBAL SEARCH
   ========================= */
 
@@ -776,30 +957,38 @@ export default function Dashboard() {
         results.push({
           type: "Customer",
           name: user?.name || "Customer",
-          detail: user?.email || "",
+          detail: user?.email || user?.phone || "",
           path: "/admin/customers",
+          icon: "customers",
         });
       }
     });
 
     sellerUsers.forEach((user) => {
+      const isReseller =
+        String(user?.role || "").toLowerCase() === "reseller";
+
       const text = [
         user?.name,
         user?.email,
+        user?.phone,
         user?.businessName,
+        user?.storeName,
       ]
         .join(" ")
         .toLowerCase();
 
       if (text.includes(query)) {
         results.push({
-          type: "Seller",
+          type: isReseller ? "Reseller" : "Seller",
           name:
             user?.businessName ||
+            user?.storeName ||
             user?.name ||
-            "Seller",
-          detail: user?.email || "",
-          path: "/admin/customers",
+            (isReseller ? "Reseller" : "Seller"),
+          detail: user?.email || user?.phone || "",
+          path: "/admin/sellers",
+          icon: "sellers",
         });
       }
     });
@@ -826,6 +1015,62 @@ export default function Dashboard() {
             brand?.ownerEmail ||
             "",
           path: "/admin/brands",
+          icon: "brands",
+        });
+      }
+    });
+
+    products.forEach((product) => {
+      const text = [
+        product?.name,
+        product?.title,
+        product?.sku,
+        product?.productCode,
+        product?.category,
+        product?.categoryName,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      if (text.includes(query)) {
+        results.push({
+          type: "Product",
+          name:
+            product?.name ||
+            product?.title ||
+            "Product",
+          detail:
+            product?.sku ||
+            product?.productCode ||
+            product?.category ||
+            "",
+          path: "/admin/products",
+          icon: "products",
+        });
+      }
+    });
+
+    orders.forEach((order, index) => {
+      const text = [
+        getOrderNumber(order, index),
+        order?.orderNumber,
+        order?.orderId,
+        order?.id,
+        getCustomerName(order),
+        getCustomerEmail(order),
+        getOrderStatus(order),
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      if (text.includes(query)) {
+        results.push({
+          type: "Order",
+          name: `#${getOrderNumber(order, index)}`,
+          detail: `${getCustomerName(order)} • ${getOrderStatus(order)}`,
+          path: "/admin/orders",
+          icon: "orders",
         });
       }
     });
@@ -836,14 +1081,24 @@ export default function Dashboard() {
     customerUsers,
     sellerUsers,
     brands,
+    products,
+    orders,
   ]);
+
+  const greeting = useMemo(() => {
+    const hour = new Date().getHours();
+
+    if (hour < 12) return "Good morning,";
+    if (hour < 17) return "Good afternoon,";
+    return "Good evening,";
+  }, []);
 
   /* =========================
      LOGOUT
   ========================= */
 
   const handleLogout = () => {
-    localStorage.removeItem("karodrop-user");
+    localStorage.removeItem("karodrop-admin");
 
     window.dispatchEvent(new Event("userChanged"));
 
@@ -889,7 +1144,7 @@ export default function Dashboard() {
     {
       label: "Sellers / Resellers",
       icon: "sellers",
-      path: "/admin/customers",
+      path: "/admin/sellers",
     },
     {
       label: "Design Requests",
@@ -953,8 +1208,8 @@ export default function Dashboard() {
 
       <aside
         className={`fixed top-0 left-0 bottom-0 z-50 w-[250px] bg-[#012467] text-white transition-transform duration-300 ${sidebarOpen
-            ? "translate-x-0"
-            : "-translate-x-full lg:translate-x-0"
+          ? "translate-x-0"
+          : "-translate-x-full lg:translate-x-0"
           }`}
       >
         {/* Logo */}
@@ -980,7 +1235,9 @@ export default function Dashboard() {
               }}
             />
 
-            
+            <span className="hidden text-[#012467] text-lg font-extrabold tracking-tight">
+              Karodrop
+            </span>
           </Link>
         </div>
 
@@ -996,14 +1253,14 @@ export default function Dashboard() {
                 to={item.path}
                 onClick={() => setSidebarOpen(false)}
                 className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition ${item.active
-                    ? "bg-[#0078ED] text-white shadow-lg shadow-[#0078ED]/20"
-                    : "text-white/75 hover:bg-white/10 hover:text-white"
+                  ? "bg-[#0078ED] text-white shadow-lg shadow-[#0078ED]/20"
+                  : "text-white/75 hover:bg-white/10 hover:text-white"
                   }`}
               >
                 <span
                   className={`shrink-0 ${item.active
-                      ? "text-white"
-                      : "text-white/75 group-hover:text-white"
+                    ? "text-white"
+                    : "text-white/75 group-hover:text-white"
                     }`}
                 >
                   <Icon name={item.icon} size={18} />
@@ -1081,6 +1338,7 @@ export default function Dashboard() {
                 </span>
 
                 <input
+                  ref={searchInputRef}
                   type="text"
                   value={search}
                   onChange={(e) =>
@@ -1113,12 +1371,7 @@ export default function Dashboard() {
                         >
                           <div className="w-9 h-9 rounded-lg bg-[#EAF4FF] text-[#0078ED] flex items-center justify-center">
                             <Icon
-                              name={
-                                result.type ===
-                                  "Brand"
-                                  ? "brands"
-                                  : "customers"
-                              }
+                              name={result.icon || "customers"}
                               size={17}
                             />
                           </div>
@@ -1145,8 +1398,8 @@ export default function Dashboard() {
                     )
                   ) : (
                     <div className="p-5 text-center text-sm text-[#5E6B7A]">
-                      No matching customers, sellers or
-                      brands found.
+                      No matching customers, sellers, brands,
+                      products or orders found.
                     </div>
                   )}
                 </div>
@@ -1154,10 +1407,36 @@ export default function Dashboard() {
             </div>
 
             <div className="hidden md:flex items-center gap-2 ml-auto">
+              {/* Go to Website */}
+              <button
+                type="button"
+                onClick={() => navigate("/")}
+                className="h-10 px-4 rounded-lg bg-[#0078ED] text-white flex items-center gap-2 text-sm font-semibold hover:bg-[#012467] transition shadow-sm"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 11.5 12 4l9 7.5" />
+                  <path d="M5 10.5V20h14v-9.5" />
+                  <path d="M9 20v-5h6v5" />
+                </svg>
+
+                Go to Website
+              </button>
               {/* Notification */}
 
               <button
                 type="button"
+                onClick={() => navigate("/admin/notifications")}
+                aria-label="Open notifications"
                 className="relative w-10 h-10 rounded-lg hover:bg-[#F5FAFF] flex items-center justify-center text-[#012467]"
               >
                 <Icon name="bell" size={20} />
@@ -1211,7 +1490,7 @@ export default function Dashboard() {
             <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-[#0078ED]">
-                  Good morning,
+                  {greeting}
                 </p>
 
                 <h1 className="mt-1 text-2xl sm:text-3xl font-bold text-[#012467]">
@@ -1520,7 +1799,7 @@ export default function Dashboard() {
             <div className="bg-white border border-[#DCE7F2] rounded-2xl p-4 sm:p-5 shadow-[0_3px_15px_rgba(1,36,103,0.04)]">
               <div className="mb-5">
                 <h2 className="font-bold text-[#012467]">
-                  Revenue Breakdown
+                  Order Value Summary
                 </h2>
 
                 <p className="text-xs text-[#5E6B7A] mt-1">
@@ -1552,18 +1831,20 @@ export default function Dashboard() {
                   <div className="flex items-center gap-2">
                     <span className="w-8 h-8 rounded-lg bg-[#DDF7EC] text-[#087B55] flex items-center justify-center">
                       <Icon
-                        name="shipping"
+                        name="reports"
                         size={15}
                       />
                     </span>
 
                     <span className="text-xs font-medium">
-                      Shipping
+                      Average Order Value
                     </span>
                   </div>
 
                   <span className="text-xs font-bold text-[#012467]">
-                    Included
+                    {orders.length > 0
+                      ? formatCurrency(totalSales / orders.length)
+                      : formatCurrency(0)}
                   </span>
                 </div>
 
@@ -1750,6 +2031,8 @@ export default function Dashboard() {
                             <td className="px-5 py-3 text-right">
                               <button
                                 type="button"
+                                onClick={() => navigate("/admin/orders")}
+                                aria-label={`View order ${getOrderNumber(order, index)}`}
                                 className="w-8 h-8 rounded-lg hover:bg-[#EAF4FF] text-[#5E6B7A] hover:text-[#0078ED] inline-flex items-center justify-center"
                               >
                                 <Icon
@@ -1839,9 +2122,9 @@ export default function Dashboard() {
 
                         <span
                           className={`text-[10px] font-semibold px-2 py-1 rounded-full ${product.calculatedStock ===
-                              0
-                              ? "bg-[#FFE5E7] text-[#C62828]"
-                              : "bg-[#FFF1E5] text-[#B85B00]"
+                            0
+                            ? "bg-[#FFE5E7] text-[#C62828]"
+                            : "bg-[#FFF1E5] text-[#B85B00]"
                             }`}
                         >
                           {product.calculatedStock ===
@@ -1996,7 +2279,7 @@ export default function Dashboard() {
                   </h2>
 
                   <p className="text-xs text-[#5E6B7A] mt-1">
-                    Based on order item data
+                    Ranked by units sold from order items
                   </p>
                 </div>
 
@@ -2008,69 +2291,52 @@ export default function Dashboard() {
                 </Link>
               </div>
 
-              {products.length === 0 ? (
-                <EmptyState message="Products will appear here after they are added." />
+              {topSellingProducts.length === 0 ? (
+                <EmptyState message="Top-selling data will appear when orders contain product items." />
               ) : (
                 <div className="divide-y divide-[#EEF3F8]">
-                  {products
-                    .slice(0, 5)
-                    .map(
-                      (product, index) => (
-                        <div
-                          key={
-                            product?.id ||
-                            product?.productId ||
-                            index
-                          }
-                          className="px-4 py-3 flex items-center gap-3"
-                        >
-                          <div className="w-7 h-7 rounded-full bg-[#EAF4FF] text-[#0078ED] flex items-center justify-center text-xs font-bold">
-                            {index + 1}
-                          </div>
+                  {topSellingProducts.map((item, index) => (
+                    <div
+                      key={`${item.key}-${index}`}
+                      className="px-4 py-3 flex items-center gap-3"
+                    >
+                      <div className="w-7 h-7 rounded-full bg-[#EAF4FF] text-[#0078ED] flex items-center justify-center text-xs font-bold">
+                        {index + 1}
+                      </div>
 
-                          <div className="w-10 h-10 rounded-lg bg-[#F5F8FC] overflow-hidden flex items-center justify-center">
-                            {product?.image ? (
-                              <img
-                                src={
-                                  product.image
-                                }
-                                alt={
-                                  product?.name ||
-                                  "Product"
-                                }
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <Icon
-                                name="products"
-                                size={17}
-                              />
-                            )}
-                          </div>
+                      <div className="w-10 h-10 rounded-lg bg-[#F5F8FC] overflow-hidden flex items-center justify-center">
+                        {item.image ? (
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <Icon name="products" size={17} />
+                        )}
+                      </div>
 
-                          <div className="min-w-0 flex-1">
-                            <p className="text-xs font-semibold text-[#0B1F3A] truncate">
-                              {product?.name ||
-                                product?.title ||
-                                "Product"}
-                            </p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-semibold text-[#0B1F3A] truncate">
+                          {item.name}
+                        </p>
 
-                            <p className="text-[11px] text-[#7A8798] mt-1">
-                              {product?.category ||
-                                "Product"}
-                            </p>
-                          </div>
+                        <p className="text-[11px] text-[#7A8798] mt-1 truncate">
+                          {item.category}
+                        </p>
+                      </div>
 
-                          <p className="text-xs font-bold text-[#012467]">
-                            {formatCurrency(
-                              product?.price ||
-                              product?.sellingPrice ||
-                              0
-                            )}
-                          </p>
-                        </div>
-                      )
-                    )}
+                      <div className="shrink-0 text-right">
+                        <p className="text-xs font-bold text-[#012467]">
+                          {item.quantity} sold
+                        </p>
+
+                        <p className="text-[10px] text-[#7A8798] mt-1">
+                          Units
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

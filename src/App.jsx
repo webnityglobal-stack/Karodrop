@@ -56,6 +56,14 @@ import AdminOrders from "./pages/admin/Orders.jsx";
 import AdminProducts from "./pages/admin/Products.jsx";
 import Categories from "./pages/admin/Categories.jsx";
 import Brands from "./pages/admin/Brands.jsx";
+import DesignRequests from "./pages/admin/DesignRequests.jsx";
+import Production from "./pages/admin/Production.jsx";
+import Shipping from "./pages/admin/Shipping.jsx";
+import Offers from "./pages/admin/Offers.jsx";
+import Reports from "./pages/admin/Reports.jsx";
+import AdminNotifications from "./pages/admin/Notifications.jsx";
+import AdminSettings from "./pages/admin/Settings.jsx";
+import Sellers from "./pages/admin/Sellers.jsx";
 
 /* =========================================================
    APP
@@ -114,6 +122,9 @@ export default function App() {
 
     location.pathname === "/help-support" ||
     location.pathname.startsWith("/help-support/") ||
+
+    location.pathname === "/wishlist" ||
+    location.pathname.startsWith("/wishlist/") ||
 
     location.pathname === "/integrations" ||
     location.pathname.startsWith("/integrations/");
@@ -468,6 +479,79 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/admin/design-requests"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <DesignRequests />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/production"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <Production />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/shipping"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <Shipping />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/offers"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <Offers />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/reports"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <Reports />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/notifications"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <AdminNotifications />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/settings"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <AdminSettings />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/sellers"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <Sellers />
+              </ProtectedRoute>
+            }
+          />
+
 
         </Routes>
 

@@ -7,6 +7,56 @@ export default function ProtectedRoute({
 }) {
   const location = useLocation();
 
+  // ==========================================
+  // ADMIN AUTH
+  // ==========================================
+  if (allowedRole === "admin") {
+    const savedAdmin = localStorage.getItem("karodrop-admin");
+
+    // Admin login nahi hai
+    if (!savedAdmin) {
+      return (
+        <Navigate
+          to="/admin-login"
+          state={{ from: location.pathname }}
+          replace
+        />
+      );
+    }
+
+    let admin;
+
+    try {
+      admin = JSON.parse(savedAdmin);
+    } catch {
+      localStorage.removeItem("karodrop-admin");
+
+      return (
+        <Navigate
+          to="/admin-login"
+          replace
+        />
+      );
+    }
+
+    // Admin role verify
+    if (admin?.role !== "admin") {
+      localStorage.removeItem("karodrop-admin");
+
+      return (
+        <Navigate
+          to="/admin-login"
+          replace
+        />
+      );
+    }
+
+    return children;
+  }
+
+  // ==========================================
+  // CUSTOMER / SELLER AUTH
+  // ==========================================
   const savedUser = localStorage.getItem("karodrop-user");
 
   // User login nahi hai
@@ -35,14 +85,16 @@ export default function ProtectedRoute({
     );
   }
 
-  // Agar specific role required hai
-  if (allowedRole && user.role !== allowedRole) {
+  // ==========================================
+  // ROLE CHECK
+  // ==========================================
+  if (allowedRole && user?.role !== allowedRole) {
     // Seller ko customer page par jane se roko
-    if (user.role === "seller") {
+    if (user?.role === "seller") {
       return <Navigate to="/dashboard" replace />;
     }
 
-    // Customer ko seller dashboard par jane se roko
+    // Customer ko seller/admin page par jane se roko
     return <Navigate to="/account" replace />;
   }
 

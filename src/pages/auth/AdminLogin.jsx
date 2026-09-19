@@ -77,7 +77,7 @@ export default function AdminLogin() {
     };
 
     localStorage.setItem(
-      "karodrop-user",
+      "karodrop-admin",
       JSON.stringify(currentUser)
     );
 

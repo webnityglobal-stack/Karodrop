@@ -241,6 +241,23 @@ function PackageIcon({ size = 18 }) {
   );
 }
 
+function ArrowLeftIcon({ size = 18 }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+  );
+}
+
 /* =========================================================
    STAT CARD
 ========================================================= */
@@ -327,6 +344,7 @@ function BrandModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1F3A]/50 p-4">
       <div className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
+
         {/* HEADER */}
 
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#DCE7F2] bg-white px-6 py-4">
@@ -799,8 +817,6 @@ export default function Brands() {
       return;
     }
 
-    /* Prevent duplicate brand names */
-
     const duplicate = brands.some(
       (brand) =>
         brand.id !== editingBrand?.id &&
@@ -933,522 +949,538 @@ export default function Brands() {
   ======================================================= */
 
   return (
-    <div className="min-h-screen bg-[#F5FAFF] px-4 py-5 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-[1500px]">
+    <div className="min-h-screen bg-[#F5FAFF]">
 
-        {/* HEADER */}
+      {/* ===================================================
+          WHITE HEADER
+      =================================================== */}
 
-        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <div className="flex items-center gap-2 text-sm text-[#5E6B7A]">
+      <div className="border-b border-[#DCE7F2] bg-white">
+        <div className="mx-auto max-w-[1500px] px-4 py-5 sm:px-6 lg:px-8">
+
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+            <div>
+
+              {/* BACK TO DASHBOARD */}
+
               <button
                 type="button"
                 onClick={() =>
                   navigate("/admin")
                 }
-                className="transition hover:text-[#0078ED]"
+                className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-[#5E6B7A] transition hover:text-[#0078ED]"
               >
-                Dashboard
+                <ArrowLeftIcon />
+                Back to Dashboard
               </button>
 
-              <span>/</span>
-
-              <span className="font-medium text-[#0B1F3A]">
+              <h1 className="text-2xl font-bold text-[#0B1F3A] sm:text-3xl">
                 Brands
-              </span>
+              </h1>
+
+              <p className="mt-1 text-sm text-[#5E6B7A]">
+                Manage customer brands and their
+                product catalogs.
+              </p>
+
             </div>
 
-            <h1 className="mt-2 text-2xl font-bold text-[#0B1F3A] sm:text-3xl">
-              Brands
-            </h1>
+            <button
+              type="button"
+              onClick={openAddModal}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0078ED] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#012467]"
+            >
+              <PlusIcon />
+              Add Brand
+            </button>
 
-            <p className="mt-1 text-sm text-[#5E6B7A]">
-              Manage customer brands and their
-              product catalogs.
-            </p>
           </div>
 
-          <button
-            type="button"
-            onClick={openAddModal}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0078ED] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#012467]"
-          >
-            <PlusIcon />
-            Add Brand
-          </button>
         </div>
+      </div>
 
-        {/* STATS */}
+      {/* ===================================================
+          PAGE CONTENT
+      =================================================== */}
 
-        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="px-4 py-6 sm:px-6 lg:px-8">
 
-          <StatCard
-            title="Total Brands"
-            value={stats.total}
-            description="Brands created"
-            icon={<StoreIcon />}
-          />
+        <div className="mx-auto max-w-[1500px]">
 
-          <StatCard
-            title="Active Brands"
-            value={stats.active}
-            description="Currently active"
-            icon={<StoreIcon />}
-          />
+          {/* STATS */}
 
-          <StatCard
-            title="Brand Owners"
-            value={stats.ownedBrands}
-            description="Brands with assigned owners"
-            icon={<UserIcon />}
-          />
+          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
-          <StatCard
-            title="Total Products"
-            value={stats.totalProducts}
-            description="Across all product catalogs"
-            icon={<PackageIcon />}
-          />
+            <StatCard
+              title="Total Brands"
+              value={stats.total}
+              description="Brands created"
+              icon={<StoreIcon />}
+            />
 
-        </div>
+            <StatCard
+              title="Active Brands"
+              value={stats.active}
+              description="Currently active"
+              icon={<StoreIcon />}
+            />
 
-        {/* SEARCH / FILTER */}
+            <StatCard
+              title="Brand Owners"
+              value={stats.ownedBrands}
+              description="Brands with assigned owners"
+              icon={<UserIcon />}
+            />
 
-        <div className="mb-6 rounded-2xl border border-[#DCE7F2] bg-white p-4 shadow-sm">
+            <StatCard
+              title="Total Products"
+              value={stats.totalProducts}
+              description="Across all product catalogs"
+              icon={<PackageIcon />}
+            />
 
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_220px]">
+          </div>
 
-            <div className="relative">
+          {/* SEARCH / FILTER */}
 
-              <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7A8795]">
-                <SearchIcon />
+          <div className="mb-6 rounded-2xl border border-[#DCE7F2] bg-white p-4 shadow-sm">
+
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_220px]">
+
+              <div className="relative">
+
+                <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7A8795]">
+                  <SearchIcon />
+                </div>
+
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(event) =>
+                    setSearch(
+                      event.target.value
+                    )
+                  }
+                  placeholder="Search brand, owner or email..."
+                  className="w-full rounded-xl border border-[#DCE7F2] py-3 pl-11 pr-4 text-sm text-[#0B1F3A] outline-none transition placeholder:text-[#9AA7B5] focus:border-[#0078ED] focus:ring-2 focus:ring-[#0078ED]/10"
+                />
+
               </div>
 
-              <input
-                type="text"
-                value={search}
+              <select
+                value={statusFilter}
                 onChange={(event) =>
-                  setSearch(
+                  setStatusFilter(
                     event.target.value
                   )
                 }
-                placeholder="Search brand, owner or email..."
-                className="w-full rounded-xl border border-[#DCE7F2] py-3 pl-11 pr-4 text-sm text-[#0B1F3A] outline-none transition placeholder:text-[#9AA7B5] focus:border-[#0078ED] focus:ring-2 focus:ring-[#0078ED]/10"
-              />
+                className="rounded-xl border border-[#DCE7F2] bg-white px-4 py-3 text-sm font-medium text-[#0B1F3A] outline-none focus:border-[#0078ED]"
+              >
+                <option value="All">
+                  All Status
+                </option>
+
+                <option value="Active">
+                  Active
+                </option>
+
+                <option value="Inactive">
+                  Inactive
+                </option>
+              </select>
 
             </div>
-
-            <select
-              value={statusFilter}
-              onChange={(event) =>
-                setStatusFilter(
-                  event.target.value
-                )
-              }
-              className="rounded-xl border border-[#DCE7F2] bg-white px-4 py-3 text-sm font-medium text-[#0B1F3A] outline-none focus:border-[#0078ED]"
-            >
-              <option value="All">
-                All Status
-              </option>
-
-              <option value="Active">
-                Active
-              </option>
-
-              <option value="Inactive">
-                Inactive
-              </option>
-            </select>
-
-          </div>
-        </div>
-
-        {/* BRAND CATALOG */}
-
-        <div className="overflow-hidden rounded-2xl border border-[#DCE7F2] bg-white shadow-sm">
-
-          <div className="flex flex-col gap-1 border-b border-[#DCE7F2] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-
-            <div>
-              <h2 className="font-bold text-[#0B1F3A]">
-                Brand Catalog
-              </h2>
-
-              <p className="text-xs text-[#7A8795]">
-                Showing{" "}
-                {filteredBrands.length}{" "}
-                of {brands.length} brands
-              </p>
-            </div>
-
           </div>
 
-          {filteredBrands.length === 0 ? (
-            <div className="px-6 py-16 text-center">
+          {/* BRAND CATALOG */}
 
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EAF4FF] text-[#0078ED]">
-                <StoreIcon size={27} />
+          <div className="overflow-hidden rounded-2xl border border-[#DCE7F2] bg-white shadow-sm">
+
+            <div className="flex flex-col gap-1 border-b border-[#DCE7F2] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+
+              <div>
+                <h2 className="font-bold text-[#0B1F3A]">
+                  Brand Catalog
+                </h2>
+
+                <p className="text-xs text-[#7A8795]">
+                  Showing{" "}
+                  {filteredBrands.length}{" "}
+                  of {brands.length} brands
+                </p>
               </div>
 
-              <h3 className="text-lg font-bold text-[#0B1F3A]">
-                No brands found
-              </h3>
-
-              <p className="mx-auto mt-1 max-w-md text-sm text-[#5E6B7A]">
-                {brands.length === 0
-                  ? "Your brand catalog is empty. Add your first brand to get started."
-                  : "Try changing your search or status filter."}
-              </p>
-
-              {brands.length === 0 && (
-                <button
-                  type="button"
-                  onClick={openAddModal}
-                  className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#0078ED] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#012467]"
-                >
-                  <PlusIcon />
-                  Add First Brand
-                </button>
-              )}
-
             </div>
-          ) : (
-            <>
-              {/* DESKTOP */}
 
-              <div className="hidden overflow-x-auto lg:block">
+            {filteredBrands.length === 0 ? (
+              <div className="px-6 py-16 text-center">
 
-                <table className="w-full min-w-[1100px]">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EAF4FF] text-[#0078ED]">
+                  <StoreIcon size={27} />
+                </div>
 
-                  <thead className="bg-[#F5FAFF]">
+                <h3 className="text-lg font-bold text-[#0B1F3A]">
+                  No brands found
+                </h3>
 
-                    <tr className="border-b border-[#DCE7F2] text-left">
+                <p className="mx-auto mt-1 max-w-md text-sm text-[#5E6B7A]">
+                  {brands.length === 0
+                    ? "Your brand catalog is empty. Add your first brand to get started."
+                    : "Try changing your search or status filter."}
+                </p>
 
-                      <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Brand
-                      </th>
+                {brands.length === 0 && (
+                  <button
+                    type="button"
+                    onClick={openAddModal}
+                    className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#0078ED] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#012467]"
+                  >
+                    <PlusIcon />
+                    Add First Brand
+                  </button>
+                )}
 
-                      <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Owner
-                      </th>
+              </div>
+            ) : (
+              <>
+                {/* DESKTOP */}
 
-                      <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Products
-                      </th>
+                <div className="hidden overflow-x-auto lg:block">
 
-                      <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Status
-                      </th>
+                  <table className="w-full min-w-[1100px]">
 
-                      <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Created
-                      </th>
+                    <thead className="bg-[#F5FAFF]">
 
-                      <th className="px-5 py-4 text-right text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Actions
-                      </th>
+                      <tr className="border-b border-[#DCE7F2] text-left">
 
-                    </tr>
+                        <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Brand
+                        </th>
 
-                  </thead>
+                        <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Owner
+                        </th>
 
-                  <tbody>
+                        <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Products
+                        </th>
 
-                    {filteredBrands.map(
-                      (brand) => {
-                        const productCount =
-                          getProductCount(
-                            brand
-                          );
+                        <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Status
+                        </th>
 
-                        return (
-                          <tr
-                            key={brand.id}
-                            className="border-b border-[#EEF3F7] transition hover:bg-[#F9FCFF]"
-                          >
+                        <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Created
+                        </th>
 
-                            {/* BRAND */}
+                        <th className="px-5 py-4 text-right text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Actions
+                        </th>
 
-                            <td className="px-5 py-4">
+                      </tr>
 
-                              <div className="flex items-center gap-3">
+                    </thead>
 
-                                <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#DCE7F2] bg-[#F5FAFF] text-[#0078ED]">
+                    <tbody>
 
-                                  {brand.logo ? (
-                                    <img
-                                      src={
-                                        brand.logo
-                                      }
-                                      alt={
-                                        brand.name
-                                      }
-                                      className="h-full w-full object-contain"
-                                      onError={(
-                                        event
-                                      ) => {
-                                        event.currentTarget.style.display =
-                                          "none";
-                                      }}
-                                    />
-                                  ) : (
-                                    <StoreIcon />
-                                  )}
+                      {filteredBrands.map(
+                        (brand) => {
+                          const productCount =
+                            getProductCount(
+                              brand
+                            );
+
+                          return (
+                            <tr
+                              key={brand.id}
+                              className="border-b border-[#EEF3F7] transition hover:bg-[#F9FCFF]"
+                            >
+
+                              {/* BRAND */}
+
+                              <td className="px-5 py-4">
+
+                                <div className="flex items-center gap-3">
+
+                                  <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#DCE7F2] bg-[#F5FAFF] text-[#0078ED]">
+
+                                    {brand.logo ? (
+                                      <img
+                                        src={
+                                          brand.logo
+                                        }
+                                        alt={
+                                          brand.name
+                                        }
+                                        className="h-full w-full object-contain"
+                                        onError={(
+                                          event
+                                        ) => {
+                                          event.currentTarget.style.display =
+                                            "none";
+                                        }}
+                                      />
+                                    ) : (
+                                      <StoreIcon />
+                                    )}
+
+                                  </div>
+
+                                  <div className="min-w-0">
+
+                                    <p className="font-semibold text-[#0B1F3A]">
+                                      {brand.name}
+                                    </p>
+
+                                    <p className="mt-1 max-w-xs truncate text-xs text-[#7A8795]">
+                                      {brand.description ||
+                                        "No description"}
+                                    </p>
+
+                                  </div>
 
                                 </div>
 
+                              </td>
+
+                              {/* OWNER */}
+
+                              <td className="px-5 py-4">
+
+                                {brand.ownerName ||
+                                brand.ownerEmail ? (
+                                  <div className="flex items-center gap-2">
+
+                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#EAF4FF] text-[#0078ED]">
+                                      <UserIcon
+                                        size={16}
+                                      />
+                                    </div>
+
+                                    <div className="min-w-0">
+
+                                      <p className="truncate text-sm font-semibold text-[#0B1F3A]">
+                                        {brand.ownerName ||
+                                          "Unknown"}
+                                      </p>
+
+                                      <p className="max-w-[180px] truncate text-xs text-[#7A8795]">
+                                        {brand.ownerEmail ||
+                                          "No email"}
+                                      </p>
+
+                                    </div>
+
+                                  </div>
+                                ) : (
+                                  <span className="text-sm text-[#9AA7B5]">
+                                    Not assigned
+                                  </span>
+                                )}
+
+                              </td>
+
+                              {/* PRODUCTS */}
+
+                              <td className="px-5 py-4">
+
+                                <span className="inline-flex items-center gap-1.5 font-semibold text-[#0B1F3A]">
+                                  <PackageIcon
+                                    size={16}
+                                  />
+                                  {productCount}
+                                </span>
+
+                              </td>
+
+                              {/* STATUS */}
+
+                              <td className="px-5 py-4">
+
+                                <span
+                                  className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusStyle(
+                                    brand.status
+                                  )}`}
+                                >
+                                  {brand.status ||
+                                    "Active"}
+                                </span>
+
+                              </td>
+
+                              {/* CREATED */}
+
+                              <td className="px-5 py-4 text-sm text-[#5E6B7A]">
+                                {formatDate(
+                                  brand.createdAt
+                                )}
+                              </td>
+
+                              {/* ACTIONS */}
+
+                              <td className="px-5 py-4">
+
+                                <div className="flex justify-end gap-2">
+
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      openEditModal(
+                                        brand
+                                      )
+                                    }
+                                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#DCE7F2] text-[#0078ED] transition hover:bg-[#EAF4FF]"
+                                    title="Edit brand"
+                                  >
+                                    <EditIcon />
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleDeleteBrand(
+                                        brand
+                                      )
+                                    }
+                                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-600 transition hover:bg-red-50"
+                                    title="Delete brand"
+                                  >
+                                    <DeleteIcon />
+                                  </button>
+
+                                </div>
+
+                              </td>
+
+                            </tr>
+                          );
+                        }
+                      )}
+
+                    </tbody>
+
+                  </table>
+
+                </div>
+
+                {/* MOBILE */}
+
+                <div className="divide-y divide-[#EEF3F7] lg:hidden">
+
+                  {filteredBrands.map(
+                    (brand) => {
+                      const productCount =
+                        getProductCount(
+                          brand
+                        );
+
+                      return (
+                        <div
+                          key={brand.id}
+                          className="p-4"
+                        >
+
+                          <div className="flex gap-3">
+
+                            <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#DCE7F2] bg-[#F5FAFF] text-[#0078ED]">
+
+                              {brand.logo ? (
+                                <img
+                                  src={
+                                    brand.logo
+                                  }
+                                  alt={
+                                    brand.name
+                                  }
+                                  className="h-full w-full object-contain"
+                                  onError={(
+                                    event
+                                  ) => {
+                                    event.currentTarget.style.display =
+                                      "none";
+                                  }}
+                                />
+                              ) : (
+                                <StoreIcon />
+                              )}
+
+                            </div>
+
+                            <div className="min-w-0 flex-1">
+
+                              <div className="flex items-start justify-between gap-3">
+
                                 <div className="min-w-0">
 
-                                  <p className="font-semibold text-[#0B1F3A]">
+                                  <h3 className="truncate font-bold text-[#0B1F3A]">
                                     {brand.name}
-                                  </p>
+                                  </h3>
 
-                                  <p className="mt-1 max-w-xs truncate text-xs text-[#7A8795]">
+                                  <p className="mt-1 text-xs text-[#5E6B7A]">
                                     {brand.description ||
                                       "No description"}
                                   </p>
 
                                 </div>
 
+                                <span
+                                  className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${getStatusStyle(
+                                    brand.status
+                                  )}`}
+                                >
+                                  {brand.status ||
+                                    "Active"}
+                                </span>
+
                               </div>
 
-                            </td>
+                              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-3">
 
-                            {/* OWNER */}
+                                <div className="min-w-0">
 
-                            <td className="px-5 py-4">
+                                  <p className="text-[11px] text-[#7A8795]">
+                                    Owner
+                                  </p>
 
-                              {brand.ownerName ||
-                              brand.ownerEmail ? (
-                                <div className="flex items-center gap-2">
+                                  <p className="max-w-[180px] truncate text-sm font-semibold text-[#0B1F3A]">
+                                    {brand.ownerName ||
+                                      "Not assigned"}
+                                  </p>
 
-                                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#EAF4FF] text-[#0078ED]">
-                                    <UserIcon
-                                      size={16}
-                                    />
-                                  </div>
-
-                                  <div className="min-w-0">
-
-                                    <p className="truncate text-sm font-semibold text-[#0B1F3A]">
-                                      {brand.ownerName ||
-                                        "Unknown"}
+                                  {brand.ownerEmail && (
+                                    <p className="max-w-[180px] truncate text-[11px] text-[#7A8795]">
+                                      {brand.ownerEmail}
                                     </p>
-
-                                    <p className="max-w-[180px] truncate text-xs text-[#7A8795]">
-                                      {brand.ownerEmail ||
-                                        "No email"}
-                                    </p>
-
-                                  </div>
+                                  )}
 
                                 </div>
-                              ) : (
-                                <span className="text-sm text-[#9AA7B5]">
-                                  Not assigned
-                                </span>
-                              )}
 
-                            </td>
+                                <div>
 
-                            {/* PRODUCTS */}
-
-                            <td className="px-5 py-4">
-
-                              <span className="inline-flex items-center gap-1.5 font-semibold text-[#0B1F3A]">
-                                <PackageIcon
-                                  size={16}
-                                />
-                                {productCount}
-                              </span>
-
-                            </td>
-
-                            {/* STATUS */}
-
-                            <td className="px-5 py-4">
-
-                              <span
-                                className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusStyle(
-                                  brand.status
-                                )}`}
-                              >
-                                {brand.status ||
-                                  "Active"}
-                              </span>
-
-                            </td>
-
-                            {/* CREATED */}
-
-                            <td className="px-5 py-4 text-sm text-[#5E6B7A]">
-                              {formatDate(
-                                brand.createdAt
-                              )}
-                            </td>
-
-                            {/* ACTIONS */}
-
-                            <td className="px-5 py-4">
-
-                              <div className="flex justify-end gap-2">
-
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    openEditModal(
-                                      brand
-                                    )
-                                  }
-                                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#DCE7F2] text-[#0078ED] transition hover:bg-[#EAF4FF]"
-                                  title="Edit brand"
-                                >
-                                  <EditIcon />
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleDeleteBrand(
-                                      brand
-                                    )
-                                  }
-                                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-600 transition hover:bg-red-50"
-                                  title="Delete brand"
-                                >
-                                  <DeleteIcon />
-                                </button>
-
-                              </div>
-
-                            </td>
-
-                          </tr>
-                        );
-                      }
-                    )}
-
-                  </tbody>
-
-                </table>
-
-              </div>
-
-              {/* MOBILE */}
-
-              <div className="divide-y divide-[#EEF3F7] lg:hidden">
-
-                {filteredBrands.map(
-                  (brand) => {
-                    const productCount =
-                      getProductCount(
-                        brand
-                      );
-
-                    return (
-                      <div
-                        key={brand.id}
-                        className="p-4"
-                      >
-
-                        <div className="flex gap-3">
-
-                          <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#DCE7F2] bg-[#F5FAFF] text-[#0078ED]">
-
-                            {brand.logo ? (
-                              <img
-                                src={
-                                  brand.logo
-                                }
-                                alt={
-                                  brand.name
-                                }
-                                className="h-full w-full object-contain"
-                                onError={(
-                                  event
-                                ) => {
-                                  event.currentTarget.style.display =
-                                    "none";
-                                }}
-                              />
-                            ) : (
-                              <StoreIcon />
-                            )}
-
-                          </div>
-
-                          <div className="min-w-0 flex-1">
-
-                            <div className="flex items-start justify-between gap-3">
-
-                              <div className="min-w-0">
-
-                                <h3 className="truncate font-bold text-[#0B1F3A]">
-                                  {brand.name}
-                                </h3>
-
-                                <p className="mt-1 text-xs text-[#5E6B7A]">
-                                  {brand.description ||
-                                    "No description"}
-                                </p>
-
-                              </div>
-
-                              <span
-                                className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${getStatusStyle(
-                                  brand.status
-                                )}`}
-                              >
-                                {brand.status ||
-                                  "Active"}
-                              </span>
-
-                            </div>
-
-                            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-3">
-
-                              <div className="min-w-0">
-
-                                <p className="text-[11px] text-[#7A8795]">
-                                  Owner
-                                </p>
-
-                                <p className="max-w-[180px] truncate text-sm font-semibold text-[#0B1F3A]">
-                                  {brand.ownerName ||
-                                    "Not assigned"}
-                                </p>
-
-                                {brand.ownerEmail && (
-                                  <p className="max-w-[180px] truncate text-[11px] text-[#7A8795]">
-                                    {brand.ownerEmail}
+                                  <p className="text-[11px] text-[#7A8795]">
+                                    Products
                                   </p>
-                                )}
 
-                              </div>
+                                  <p className="text-sm font-bold text-[#0B1F3A]">
+                                    {productCount}
+                                  </p>
 
-                              <div>
+                                </div>
 
-                                <p className="text-[11px] text-[#7A8795]">
-                                  Products
-                                </p>
+                                <div>
 
-                                <p className="text-sm font-bold text-[#0B1F3A]">
-                                  {productCount}
-                                </p>
+                                  <p className="text-[11px] text-[#7A8795]">
+                                    Created
+                                  </p>
 
-                              </div>
+                                  <p className="text-sm font-semibold text-[#0B1F3A]">
+                                    {formatDate(
+                                      brand.createdAt
+                                    )}
+                                  </p>
 
-                              <div>
-
-                                <p className="text-[11px] text-[#7A8795]">
-                                  Created
-                                </p>
-
-                                <p className="text-sm font-semibold text-[#0B1F3A]">
-                                  {formatDate(
-                                    brand.createdAt
-                                  )}
-                                </p>
+                                </div>
 
                               </div>
 
@@ -1456,47 +1488,46 @@ export default function Brands() {
 
                           </div>
 
+                          <div className="mt-4 flex gap-2">
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                openEditModal(
+                                  brand
+                                )
+                              }
+                              className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#DCE7F2] py-2.5 text-sm font-semibold text-[#0078ED] transition hover:bg-[#EAF4FF]"
+                            >
+                              <EditIcon size={16} />
+                              Edit
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleDeleteBrand(
+                                  brand
+                                )
+                              }
+                              className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-red-100 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                            >
+                              <DeleteIcon size={16} />
+                              Delete
+                            </button>
+
+                          </div>
+
                         </div>
+                      );
+                    }
+                  )}
 
-                        <div className="mt-4 flex gap-2">
+                </div>
+              </>
+            )}
 
-                          <button
-                            type="button"
-                            onClick={() =>
-                              openEditModal(
-                                brand
-                              )
-                            }
-                            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#DCE7F2] py-2.5 text-sm font-semibold text-[#0078ED] transition hover:bg-[#EAF4FF]"
-                          >
-                            <EditIcon size={16} />
-                            Edit
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleDeleteBrand(
-                                brand
-                              )
-                            }
-                            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-red-100 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
-                          >
-                            <DeleteIcon size={16} />
-                            Delete
-                          </button>
-
-                        </div>
-
-                      </div>
-                    );
-                  }
-                )}
-
-              </div>
-            </>
-          )}
-
+          </div>
         </div>
       </div>
 

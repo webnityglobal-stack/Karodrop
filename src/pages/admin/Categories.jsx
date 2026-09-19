@@ -58,6 +58,23 @@ const formatDate = (date) => {
    ICONS
 ========================================================= */
 
+function ArrowLeftIcon({ size = 18 }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+  );
+}
+
 function PlusIcon({ size = 18 }) {
   return (
     <svg
@@ -220,6 +237,7 @@ function CategoryModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B1F3A]/50 p-4">
       <div className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
+
         {/* HEADER */}
 
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#DCE7F2] bg-white px-6 py-4">
@@ -681,519 +699,531 @@ export default function Categories() {
   ======================================================= */
 
   return (
-    <div className="min-h-screen bg-[#F5FAFF] px-4 py-5 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#F5FAFF]">
 
-      <div className="mx-auto max-w-[1500px]">
+      {/* =================================================
+          HEADER
+      ================================================== */}
 
-        {/* =================================================
-            HEADER
-        ================================================== */}
+      <div className="border-b border-[#DCE7F2] bg-white">
 
-        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="mx-auto max-w-[1500px] px-4 py-5 sm:px-6 lg:px-8">
 
-          <div>
-            <div className="flex items-center gap-2 text-sm text-[#5E6B7A]">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+            <div>
+
+              {/* BACK TO DASHBOARD */}
+
               <button
                 type="button"
-                onClick={() =>
-                  navigate("/admin")
-                }
-                className="transition hover:text-[#0078ED]"
+                onClick={() => navigate("/admin")}
+                className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-[#5E6B7A] transition hover:text-[#0078ED]"
               >
-                Dashboard
+                <ArrowLeftIcon />
+                Back to Dashboard
               </button>
 
-              <span>/</span>
-
-              <span className="font-medium text-[#0B1F3A]">
+              <h1 className="text-2xl font-bold text-[#0B1F3A] sm:text-3xl">
                 Categories
-              </span>
+              </h1>
+
+              <p className="mt-1 text-sm text-[#5E6B7A]">
+                Organize and manage your product
+                categories.
+              </p>
+
             </div>
 
-            <h1 className="mt-2 text-2xl font-bold text-[#0B1F3A] sm:text-3xl">
-              Categories
-            </h1>
+            <button
+              type="button"
+              onClick={openAddModal}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0078ED] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#012467]"
+            >
+              <PlusIcon />
+              Add Category
+            </button>
 
-            <p className="mt-1 text-sm text-[#5E6B7A]">
-              Organize and manage your product
-              categories.
-            </p>
           </div>
 
-          <button
-            type="button"
-            onClick={openAddModal}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0078ED] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#012467]"
-          >
-            <PlusIcon />
-            Add Category
-          </button>
         </div>
 
-        {/* =================================================
-            STATS
-        ================================================== */}
+      </div>
 
-        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {/* =================================================
+          PAGE CONTENT
+      ================================================== */}
 
-          <StatCard
-            title="Total Categories"
-            value={stats.total}
-            description="Categories created"
-          />
+      <div className="px-4 py-6 sm:px-6 lg:px-8">
 
-          <StatCard
-            title="Active Categories"
-            value={stats.active}
-            description="Currently visible"
-          />
+        <div className="mx-auto max-w-[1500px]">
 
-          <StatCard
-            title="Inactive Categories"
-            value={stats.inactive}
-            description="Currently disabled"
-          />
+          {/* =================================================
+              STATS
+          ================================================== */}
 
-          <StatCard
-            title="Total Products"
-            value={stats.totalProducts}
-            description="Across all categories"
-          />
+          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
-        </div>
+            <StatCard
+              title="Total Categories"
+              value={stats.total}
+              description="Categories created"
+            />
 
-        {/* =================================================
-            SEARCH / FILTER
-        ================================================== */}
+            <StatCard
+              title="Active Categories"
+              value={stats.active}
+              description="Currently visible"
+            />
 
-        <div className="mb-6 rounded-2xl border border-[#DCE7F2] bg-white p-4 shadow-sm">
+            <StatCard
+              title="Inactive Categories"
+              value={stats.inactive}
+              description="Currently disabled"
+            />
 
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_220px]">
+            <StatCard
+              title="Total Products"
+              value={stats.totalProducts}
+              description="Across all categories"
+            />
 
-            <div className="relative">
+          </div>
 
-              <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7A8795]">
-                <SearchIcon />
+          {/* =================================================
+              SEARCH / FILTER
+          ================================================== */}
+
+          <div className="mb-6 rounded-2xl border border-[#DCE7F2] bg-white p-4 shadow-sm">
+
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_220px]">
+
+              <div className="relative">
+
+                <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7A8795]">
+                  <SearchIcon />
+                </div>
+
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(event) =>
+                    setSearch(
+                      event.target.value
+                    )
+                  }
+                  placeholder="Search category..."
+                  className="w-full rounded-xl border border-[#DCE7F2] py-3 pl-11 pr-4 text-sm text-[#0B1F3A] outline-none transition placeholder:text-[#9AA7B5] focus:border-[#0078ED] focus:ring-2 focus:ring-[#0078ED]/10"
+                />
+
               </div>
 
-              <input
-                type="text"
-                value={search}
+              <select
+                value={statusFilter}
                 onChange={(event) =>
-                  setSearch(
+                  setStatusFilter(
                     event.target.value
                   )
                 }
-                placeholder="Search category..."
-                className="w-full rounded-xl border border-[#DCE7F2] py-3 pl-11 pr-4 text-sm text-[#0B1F3A] outline-none transition placeholder:text-[#9AA7B5] focus:border-[#0078ED] focus:ring-2 focus:ring-[#0078ED]/10"
-              />
+                className="rounded-xl border border-[#DCE7F2] bg-white px-4 py-3 text-sm font-medium text-[#0B1F3A] outline-none focus:border-[#0078ED]"
+              >
+                <option value="All">
+                  All Status
+                </option>
+
+                <option value="Active">
+                  Active
+                </option>
+
+                <option value="Inactive">
+                  Inactive
+                </option>
+              </select>
 
             </div>
-
-            <select
-              value={statusFilter}
-              onChange={(event) =>
-                setStatusFilter(
-                  event.target.value
-                )
-              }
-              className="rounded-xl border border-[#DCE7F2] bg-white px-4 py-3 text-sm font-medium text-[#0B1F3A] outline-none focus:border-[#0078ED]"
-            >
-              <option value="All">
-                All Status
-              </option>
-
-              <option value="Active">
-                Active
-              </option>
-
-              <option value="Inactive">
-                Inactive
-              </option>
-            </select>
-
-          </div>
-        </div>
-
-        {/* =================================================
-            CATEGORY LIST
-        ================================================== */}
-
-        <div className="overflow-hidden rounded-2xl border border-[#DCE7F2] bg-white shadow-sm">
-
-          <div className="flex flex-col gap-1 border-b border-[#DCE7F2] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-
-            <div>
-              <h2 className="font-bold text-[#0B1F3A]">
-                Category Catalog
-              </h2>
-
-              <p className="text-xs text-[#7A8795]">
-                Showing{" "}
-                {filteredCategories.length}{" "}
-                of {categories.length}{" "}
-                categories
-              </p>
-            </div>
-
           </div>
 
-          {filteredCategories.length === 0 ? (
-            <div className="px-6 py-16 text-center">
+          {/* =================================================
+              CATEGORY LIST
+          ================================================== */}
 
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EAF4FF] text-[#0078ED]">
-                <FolderIcon size={27} />
+          <div className="overflow-hidden rounded-2xl border border-[#DCE7F2] bg-white shadow-sm">
+
+            <div className="flex flex-col gap-1 border-b border-[#DCE7F2] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+
+              <div>
+                <h2 className="font-bold text-[#0B1F3A]">
+                  Category Catalog
+                </h2>
+
+                <p className="text-xs text-[#7A8795]">
+                  Showing{" "}
+                  {filteredCategories.length}{" "}
+                  of {categories.length}{" "}
+                  categories
+                </p>
               </div>
 
-              <h3 className="text-lg font-bold text-[#0B1F3A]">
-                No categories found
-              </h3>
-
-              <p className="mx-auto mt-1 max-w-md text-sm text-[#5E6B7A]">
-                {categories.length === 0
-                  ? "Your category catalog is empty. Add your first category to get started."
-                  : "Try changing your search or status filter."}
-              </p>
-
-              {categories.length === 0 && (
-                <button
-                  type="button"
-                  onClick={openAddModal}
-                  className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#0078ED] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#012467]"
-                >
-                  <PlusIcon />
-                  Add First Category
-                </button>
-              )}
-
             </div>
-          ) : (
-            <>
-              {/* DESKTOP */}
 
-              <div className="hidden overflow-x-auto lg:block">
+            {filteredCategories.length === 0 ? (
+              <div className="px-6 py-16 text-center">
 
-                <table className="w-full min-w-[900px]">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EAF4FF] text-[#0078ED]">
+                  <FolderIcon size={27} />
+                </div>
 
-                  <thead className="bg-[#F5FAFF]">
+                <h3 className="text-lg font-bold text-[#0B1F3A]">
+                  No categories found
+                </h3>
 
-                    <tr className="border-b border-[#DCE7F2] text-left">
+                <p className="mx-auto mt-1 max-w-md text-sm text-[#5E6B7A]">
+                  {categories.length === 0
+                    ? "Your category catalog is empty. Add your first category to get started."
+                    : "Try changing your search or status filter."}
+                </p>
 
-                      <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Category
-                      </th>
+                {categories.length === 0 && (
+                  <button
+                    type="button"
+                    onClick={openAddModal}
+                    className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#0078ED] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#012467]"
+                  >
+                    <PlusIcon />
+                    Add First Category
+                  </button>
+                )}
 
-                      <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Description
-                      </th>
+              </div>
+            ) : (
+              <>
+                {/* DESKTOP */}
 
-                      <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Products
-                      </th>
+                <div className="hidden overflow-x-auto lg:block">
 
-                      <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Status
-                      </th>
+                  <table className="w-full min-w-[900px]">
 
-                      <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Created
-                      </th>
+                    <thead className="bg-[#F5FAFF]">
 
-                      <th className="px-5 py-4 text-right text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
-                        Actions
-                      </th>
+                      <tr className="border-b border-[#DCE7F2] text-left">
 
-                    </tr>
+                        <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Category
+                        </th>
 
-                  </thead>
+                        <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Description
+                        </th>
 
-                  <tbody>
+                        <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Products
+                        </th>
 
-                    {filteredCategories.map(
-                      (category) => {
-                        const productCount =
-                          getProductCount(
-                            category.name
-                          );
+                        <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Status
+                        </th>
 
-                        return (
-                          <tr
-                            key={category.id}
-                            className="border-b border-[#EEF3F7] transition hover:bg-[#F9FCFF]"
-                          >
+                        <th className="px-5 py-4 text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Created
+                        </th>
 
-                            {/* CATEGORY */}
+                        <th className="px-5 py-4 text-right text-xs font-bold uppercase tracking-wide text-[#5E6B7A]">
+                          Actions
+                        </th>
 
-                            <td className="px-5 py-4">
+                      </tr>
 
-                              <div className="flex items-center gap-3">
+                    </thead>
 
-                                <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#DCE7F2] bg-[#F5FAFF] text-[#0078ED]">
+                    <tbody>
 
-                                  {category.image ? (
-                                    <img
-                                      src={
-                                        category.image
-                                      }
-                                      alt={
-                                        category.name
-                                      }
-                                      className="h-full w-full object-cover"
-                                      onError={(
-                                        event
-                                      ) => {
-                                        event.currentTarget.style.display =
-                                          "none";
-                                      }}
-                                    />
-                                  ) : (
-                                    <FolderIcon />
-                                  )}
+                      {filteredCategories.map(
+                        (category) => {
+                          const productCount =
+                            getProductCount(
+                              category.name
+                            );
+
+                          return (
+                            <tr
+                              key={category.id}
+                              className="border-b border-[#EEF3F7] transition hover:bg-[#F9FCFF]"
+                            >
+
+                              {/* CATEGORY */}
+
+                              <td className="px-5 py-4">
+
+                                <div className="flex items-center gap-3">
+
+                                  <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#DCE7F2] bg-[#F5FAFF] text-[#0078ED]">
+
+                                    {category.image ? (
+                                      <img
+                                        src={
+                                          category.image
+                                        }
+                                        alt={
+                                          category.name
+                                        }
+                                        className="h-full w-full object-cover"
+                                        onError={(
+                                          event
+                                        ) => {
+                                          event.currentTarget.style.display =
+                                            "none";
+                                        }}
+                                      />
+                                    ) : (
+                                      <FolderIcon />
+                                    )}
+
+                                  </div>
+
+                                  <div className="min-w-0">
+
+                                    <p className="font-semibold text-[#0B1F3A]">
+                                      {category.name}
+                                    </p>
+
+                                  </div>
 
                                 </div>
 
+                              </td>
+
+                              {/* DESCRIPTION */}
+
+                              <td className="px-5 py-4">
+
+                                <p className="max-w-xs truncate text-sm text-[#5E6B7A]">
+                                  {category.description ||
+                                    "—"}
+                                </p>
+
+                              </td>
+
+                              {/* PRODUCTS */}
+
+                              <td className="px-5 py-4">
+
+                                <span className="font-semibold text-[#0B1F3A]">
+                                  {productCount}
+                                </span>
+
+                              </td>
+
+                              {/* STATUS */}
+
+                              <td className="px-5 py-4">
+
+                                <span
+                                  className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusStyle(
+                                    category.status
+                                  )}`}
+                                >
+                                  {category.status ||
+                                    "Active"}
+                                </span>
+
+                              </td>
+
+                              {/* CREATED */}
+
+                              <td className="px-5 py-4 text-sm text-[#5E6B7A]">
+                                {formatDate(
+                                  category.createdAt
+                                )}
+                              </td>
+
+                              {/* ACTIONS */}
+
+                              <td className="px-5 py-4">
+
+                                <div className="flex justify-end gap-2">
+
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      openEditModal(
+                                        category
+                                      )
+                                    }
+                                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#DCE7F2] text-[#0078ED] transition hover:bg-[#EAF4FF]"
+                                    title="Edit category"
+                                  >
+                                    <EditIcon />
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleDeleteCategory(
+                                        category
+                                      )
+                                    }
+                                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-600 transition hover:bg-red-50"
+                                    title="Delete category"
+                                  >
+                                    <DeleteIcon />
+                                  </button>
+
+                                </div>
+
+                              </td>
+
+                            </tr>
+                          );
+                        }
+                      )}
+
+                    </tbody>
+
+                  </table>
+
+                </div>
+
+                {/* MOBILE */}
+
+                <div className="divide-y divide-[#EEF3F7] lg:hidden">
+
+                  {filteredCategories.map(
+                    (category) => {
+                      const productCount =
+                        getProductCount(
+                          category.name
+                        );
+
+                      return (
+                        <div
+                          key={category.id}
+                          className="p-4"
+                        >
+
+                          <div className="flex gap-3">
+
+                            <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#DCE7F2] bg-[#F5FAFF] text-[#0078ED]">
+
+                              {category.image ? (
+                                <img
+                                  src={
+                                    category.image
+                                  }
+                                  alt={
+                                    category.name
+                                  }
+                                  className="h-full w-full object-cover"
+                                  onError={(
+                                    event
+                                  ) => {
+                                    event.currentTarget.style.display =
+                                      "none";
+                                  }}
+                                />
+                              ) : (
+                                <FolderIcon />
+                              )}
+
+                            </div>
+
+                            <div className="min-w-0 flex-1">
+
+                              <div className="flex items-start justify-between gap-3">
+
                                 <div className="min-w-0">
 
-                                  <p className="font-semibold text-[#0B1F3A]">
+                                  <h3 className="truncate font-bold text-[#0B1F3A]">
                                     {category.name}
+                                  </h3>
+
+                                  <p className="mt-1 text-xs text-[#5E6B7A]">
+                                    {category.description ||
+                                      "No description"}
                                   </p>
 
                                 </div>
 
-                              </div>
-
-                            </td>
-
-                            {/* DESCRIPTION */}
-
-                            <td className="px-5 py-4">
-
-                              <p className="max-w-xs truncate text-sm text-[#5E6B7A]">
-                                {category.description ||
-                                  "—"}
-                              </p>
-
-                            </td>
-
-                            {/* PRODUCTS */}
-
-                            <td className="px-5 py-4">
-
-                              <span className="font-semibold text-[#0B1F3A]">
-                                {productCount}
-                              </span>
-
-                            </td>
-
-                            {/* STATUS */}
-
-                            <td className="px-5 py-4">
-
-                              <span
-                                className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusStyle(
-                                  category.status
-                                )}`}
-                              >
-                                {category.status ||
-                                  "Active"}
-                              </span>
-
-                            </td>
-
-                            {/* CREATED */}
-
-                            <td className="px-5 py-4 text-sm text-[#5E6B7A]">
-                              {formatDate(
-                                category.createdAt
-                              )}
-                            </td>
-
-                            {/* ACTIONS */}
-
-                            <td className="px-5 py-4">
-
-                              <div className="flex justify-end gap-2">
-
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    openEditModal(
-                                      category
-                                    )
-                                  }
-                                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#DCE7F2] text-[#0078ED] transition hover:bg-[#EAF4FF]"
-                                  title="Edit category"
+                                <span
+                                  className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${getStatusStyle(
+                                    category.status
+                                  )}`}
                                 >
-                                  <EditIcon />
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleDeleteCategory(
-                                      category
-                                    )
-                                  }
-                                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-600 transition hover:bg-red-50"
-                                  title="Delete category"
-                                >
-                                  <DeleteIcon />
-                                </button>
+                                  {category.status ||
+                                    "Active"}
+                                </span>
 
                               </div>
 
-                            </td>
+                              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
 
-                          </tr>
-                        );
-                      }
-                    )}
+                                <div>
+                                  <p className="text-[11px] text-[#7A8795]">
+                                    Products
+                                  </p>
 
-                  </tbody>
+                                  <p className="text-sm font-bold text-[#0B1F3A]">
+                                    {productCount}
+                                  </p>
+                                </div>
 
-                </table>
+                                <div>
+                                  <p className="text-[11px] text-[#7A8795]">
+                                    Created
+                                  </p>
 
-              </div>
+                                  <p className="text-sm font-semibold text-[#0B1F3A]">
+                                    {formatDate(
+                                      category.createdAt
+                                    )}
+                                  </p>
+                                </div>
 
-              {/* MOBILE */}
+                              </div>
 
-              <div className="divide-y divide-[#EEF3F7] lg:hidden">
+                            </div>
 
-                {filteredCategories.map(
-                  (category) => {
-                    const productCount =
-                      getProductCount(
-                        category.name
+                          </div>
+
+                          <div className="mt-4 flex gap-2">
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                openEditModal(
+                                  category
+                                )
+                              }
+                              className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#DCE7F2] py-2.5 text-sm font-semibold text-[#0078ED] transition hover:bg-[#EAF4FF]"
+                            >
+                              <EditIcon size={16} />
+                              Edit
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleDeleteCategory(
+                                  category
+                                )
+                              }
+                              className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-red-100 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                            >
+                              <DeleteIcon size={16} />
+                              Delete
+                            </button>
+
+                          </div>
+
+                        </div>
                       );
+                    }
+                  )}
 
-                    return (
-                      <div
-                        key={category.id}
-                        className="p-4"
-                      >
+                </div>
+              </>
+            )}
 
-                        <div className="flex gap-3">
-
-                          <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#DCE7F2] bg-[#F5FAFF] text-[#0078ED]">
-
-                            {category.image ? (
-                              <img
-                                src={
-                                  category.image
-                                }
-                                alt={
-                                  category.name
-                                }
-                                className="h-full w-full object-cover"
-                                onError={(
-                                  event
-                                ) => {
-                                  event.currentTarget.style.display =
-                                    "none";
-                                }}
-                              />
-                            ) : (
-                              <FolderIcon />
-                            )}
-
-                          </div>
-
-                          <div className="min-w-0 flex-1">
-
-                            <div className="flex items-start justify-between gap-3">
-
-                              <div className="min-w-0">
-
-                                <h3 className="truncate font-bold text-[#0B1F3A]">
-                                  {category.name}
-                                </h3>
-
-                                <p className="mt-1 text-xs text-[#5E6B7A]">
-                                  {category.description ||
-                                    "No description"}
-                                </p>
-
-                              </div>
-
-                              <span
-                                className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${getStatusStyle(
-                                  category.status
-                                )}`}
-                              >
-                                {category.status ||
-                                  "Active"}
-                              </span>
-
-                            </div>
-
-                            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
-
-                              <div>
-                                <p className="text-[11px] text-[#7A8795]">
-                                  Products
-                                </p>
-
-                                <p className="text-sm font-bold text-[#0B1F3A]">
-                                  {productCount}
-                                </p>
-                              </div>
-
-                              <div>
-                                <p className="text-[11px] text-[#7A8795]">
-                                  Created
-                                </p>
-
-                                <p className="text-sm font-semibold text-[#0B1F3A]">
-                                  {formatDate(
-                                    category.createdAt
-                                  )}
-                                </p>
-                              </div>
-
-                            </div>
-
-                          </div>
-
-                        </div>
-
-                        <div className="mt-4 flex gap-2">
-
-                          <button
-                            type="button"
-                            onClick={() =>
-                              openEditModal(
-                                category
-                              )
-                            }
-                            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#DCE7F2] py-2.5 text-sm font-semibold text-[#0078ED] transition hover:bg-[#EAF4FF]"
-                          >
-                            <EditIcon size={16} />
-                            Edit
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleDeleteCategory(
-                                category
-                              )
-                            }
-                            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-red-100 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
-                          >
-                            <DeleteIcon size={16} />
-                            Delete
-                          </button>
-
-                        </div>
-
-                      </div>
-                    );
-                  }
-                )}
-
-              </div>
-            </>
-          )}
+          </div>
 
         </div>
 

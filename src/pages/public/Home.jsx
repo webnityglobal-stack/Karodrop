@@ -518,7 +518,7 @@ export default function Home() {
         />
 
         <img
-          src="/images/dropshipping-hero.png"
+          src="/images/KaroDropshipping-hero.png"
           alt="Karodrop Dropshipping"
           className="
             relative
