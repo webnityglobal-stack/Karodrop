@@ -245,7 +245,7 @@ export default function Footer() {
 
               <li>
                 <Link
-                  to="/my-orders"
+                  to="/orders"
                   className="text-white/70 transition hover:text-white"
                 >
                   My Orders
@@ -258,6 +258,15 @@ export default function Footer() {
                   className="text-white/70 transition hover:text-white"
                 >
                   Wishlist
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/about"
+                  className="text-white/70 transition hover:text-white"
+                >
+                  About Us
                 </Link>
               </li>
 

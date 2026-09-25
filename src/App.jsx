@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar.jsx";
@@ -19,6 +19,8 @@ import Checkout from "./pages/public/Checkout.jsx";
 import OrderSuccess from "./pages/public/OrderSuccess.jsx";
 import CreatorStore from "./pages/public/CreatorStore.jsx";
 import HowItWorks from "./pages/public/HowItWorks.jsx";
+import About from "./pages/public/About.jsx";
+import Resources from "./pages/public/resources/Resources.jsx";
 
 /* =========================================================
    AUTHENTICATION
@@ -71,12 +73,12 @@ import Sellers from "./pages/admin/Sellers.jsx";
 
 export default function App() {
   const location = useLocation();
+  useEffect(() => {
+  window.scrollTo(0, 0);
+}, [location.pathname]);
 
   /* =========================================================
      ADMIN PANEL
-
-     /admin
-     /admin/anything
   ========================================================= */
 
   const isAdminPanel =
@@ -160,6 +162,16 @@ export default function App() {
           <Route
             path="/"
             element={<Home />}
+          />
+
+          <Route
+            path="/about"
+            element={<About />}
+          />
+
+          <Route 
+          path="/resources" 
+          element={<Resources />} 
           />
 
           <Route
@@ -259,7 +271,7 @@ export default function App() {
           />
 
           {/* =================================================
-              CUSTOMER DESIGN REQUEST / CUSTOMIZATION
+              CUSTOMER DESIGN REQUEST
           ================================================== */}
 
           <Route
@@ -427,6 +439,10 @@ export default function App() {
             }
           />
 
+          {/* =================================================
+              ADMIN PRODUCTS
+          ================================================== */}
+
           <Route
             path="/admin/products"
             element={
@@ -436,6 +452,10 @@ export default function App() {
             }
           />
 
+          {/* =================================================
+              ADMIN CATEGORIES
+          ================================================== */}
+
           <Route
             path="/admin/categories"
             element={
@@ -444,6 +464,10 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* =================================================
+              ADMIN BRANDS
+          ================================================== */}
 
           <Route
             path="/admin/brands"
@@ -480,6 +504,10 @@ export default function App() {
             }
           />
 
+          {/* =================================================
+              ADMIN DESIGN REQUESTS
+          ================================================== */}
+
           <Route
             path="/admin/design-requests"
             element={
@@ -488,6 +516,10 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* =================================================
+              ADMIN PRODUCTION
+          ================================================== */}
 
           <Route
             path="/admin/production"
@@ -498,6 +530,10 @@ export default function App() {
             }
           />
 
+          {/* =================================================
+              ADMIN SHIPPING
+          ================================================== */}
+
           <Route
             path="/admin/shipping"
             element={
@@ -506,6 +542,10 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* =================================================
+              ADMIN OFFERS
+          ================================================== */}
 
           <Route
             path="/admin/offers"
@@ -516,6 +556,10 @@ export default function App() {
             }
           />
 
+          {/* =================================================
+              ADMIN REPORTS
+          ================================================== */}
+
           <Route
             path="/admin/reports"
             element={
@@ -524,6 +568,10 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* =================================================
+              ADMIN NOTIFICATIONS
+          ================================================== */}
 
           <Route
             path="/admin/notifications"
@@ -534,6 +582,10 @@ export default function App() {
             }
           />
 
+          {/* =================================================
+              ADMIN SETTINGS
+          ================================================== */}
+
           <Route
             path="/admin/settings"
             element={
@@ -543,6 +595,10 @@ export default function App() {
             }
           />
 
+          {/* =================================================
+              ADMIN SELLERS / RESELLERS
+          ================================================== */}
+
           <Route
             path="/admin/sellers"
             element={
@@ -551,7 +607,6 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-
 
         </Routes>
 
