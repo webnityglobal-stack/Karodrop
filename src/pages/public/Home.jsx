@@ -99,12 +99,12 @@ export default function Home() {
             <p
               className="
                 mb-5
-                text-[12px]
+                text-[20px]
                 font-bold
                 tracking-[3px]
                 text-[#0078ED]
-                sm:text-[13px]
-                lg:text-[14px]
+                sm:text-[20px]
+                lg:text-[20px]
               "
             >
               START YOUR ONLINE BUSINESS
@@ -376,7 +376,7 @@ export default function Home() {
             {/* ================= BUTTON ================= */}
 
             <Link
-              to="/category/handicrafts"
+              to="/login"
               className="
                 mt-7
                 inline-flex
@@ -488,12 +488,12 @@ export default function Home() {
         className="
           relative
           flex
-          min-h-[380px]
+          min-h-[280px]
           items-center
           justify-center
           overflow-hidden
           bg-[#F5FAFF]
-          px-4
+          px-0
           lg:hidden
         "
       >
@@ -506,8 +506,8 @@ export default function Home() {
             absolute
             left-1/2
             top-1/2
-            h-[380px]
-            w-[380px]
+            h-[300px]
+            w-[300px]
             -translate-x-1/2
             -translate-y-1/2
             rounded-full
@@ -525,7 +525,7 @@ export default function Home() {
             z-10
             h-auto
             w-full
-            max-w-[650px]
+            max-w-[560px]
             object-contain
             drop-shadow-[0_15px_30px_rgba(1,36,103,0.08)]
           "

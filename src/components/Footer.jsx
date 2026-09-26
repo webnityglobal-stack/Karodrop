@@ -15,19 +15,19 @@ export default function Footer() {
   };
 
   return (
-    <footer className="mt-24 bg-[#012467] text-white">
+    <footer className=" bg-[#012467] text-white">
 
       {/* =====================================================
           MAIN FOOTER
       ====================================================== */}
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 md:py-16 lg:px-8">
 
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-14">
+        <div className="grid grid-cols-2 gap-8 lg:grid-cols-4 lg:gap-14">
 
           {/* =================================================
               BRAND
           ================================================== */}
-          <div className="lg:pr-8">
+          <div className="col-span-2 lg:col-span-1 lg:pr-8">
 
             <Link
               to="/"
@@ -276,9 +276,9 @@ export default function Footer() {
           {/* =================================================
               NEWSLETTER
           ================================================== */}
-          <div>
+          <div className="col-span-2 lg:col-span-1">
 
-            <h3 className="mb-5 text-sm font-semibold uppercase tracking-wider text-white/50">
+            <h3 className="mb-3  text-sm font-semibold uppercase tracking-wider text-white/50">
               Stay in the Loop
             </h3>
 
@@ -367,7 +367,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <p className="text-xs font-medium">
+              <p className="text-[11px] font-medium">
                 Cash on Delivery
               </p>
 
@@ -386,7 +386,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <p className="text-xs font-medium">
+              <p className="text-[11px] font-medium">
                 Secure Checkout
               </p>
 
@@ -405,7 +405,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <p className="text-xs font-medium">
+              <p className="text-[11px] font-medium">
                 Easy Returns
               </p>
 
@@ -424,7 +424,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <p className="text-xs font-medium">
+              <p className="text-[11px] font-medium">
                 Reliable Shipping
               </p>
 
@@ -447,11 +447,11 @@ export default function Footer() {
 
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
 
-            <p className="text-center text-xs text-white/45 md:text-left">
+            <p className="text-center text-[11px] text-white/45 md:text-left">
               © {new Date().getFullYear()} Karodrop. All rights reserved.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs">
+            <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-[11px]">
 
               <Link
                 to="/privacy-policy"

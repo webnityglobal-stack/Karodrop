@@ -141,31 +141,29 @@ const howItWorksMenu = [
 /* =========================================================
    RESOURCES
 ========================================================= */
-
 const resourcesMenu = [
+  
   {
     label: "Blog",
-    to: "/resources",
+    to: "/resources/blog",
   },
   {
-    label: "FAQs",
-    to: "/resources",
-  },
-  {
-    label: "Guides",
-    to: "/resources",
+    label: "Guides & Tutorials",
+    to: "/resources/guides",
   },
   {
     label: "Selling Tips",
-    to: "/resources",
+    to: "/resources/selling-tips",
+  },
+  {
+    label: "FAQs",
+    to: "/resources/faqs",
   },
   {
     label: "Help Center",
-    to: "/resources",
+    to: "/resources/help-center",
   },
 ];
-
-
 /* =========================================================
    CATEGORY PRODUCTS
 ========================================================= */
@@ -383,10 +381,10 @@ export default function Navbar() {
 
   const searchResults = searchText.trim()
     ? products
-        .filter((product) =>
-          productMatchesSearch(product, searchText)
-        )
-        .slice(0, 5)
+      .filter((product) =>
+        productMatchesSearch(product, searchText)
+      )
+      .slice(0, 5)
     : [];
 
 
@@ -569,11 +567,10 @@ export default function Navbar() {
                     text-[15px]
                     font-medium
                     transition-colors
-                    ${
-                      isActive
-                        ? "text-[#0078ED]"
-                        : "text-[#0B1F3A] hover:text-[#0078ED]"
-                    }
+                    ${isActive
+                    ? "text-[#0078ED]"
+                    : "text-[#0B1F3A] hover:text-[#0078ED]"
+                  }
                   `
                 }
               >
@@ -637,10 +634,9 @@ export default function Navbar() {
                       h-4
                       w-4
                       transition-transform
-                      ${
-                        activeMenu === "products"
-                          ? "rotate-180"
-                          : ""
+                      ${activeMenu === "products"
+                        ? "rotate-180"
+                        : ""
                       }
                     `}
                     fill="none"
@@ -722,10 +718,9 @@ export default function Navbar() {
                                   py-3.5
                                   text-[15px]
                                   transition-all
-                                  ${
-                                    isSelected
-                                      ? "bg-white text-[#0078ED] shadow-sm"
-                                      : "text-[#0B1F3A] hover:bg-white hover:text-[#0078ED]"
+                                  ${isSelected
+                                    ? "bg-white text-[#0078ED] shadow-sm"
+                                    : "text-[#0B1F3A] hover:bg-white hover:text-[#0078ED]"
                                   }
                                 `}
                               >
@@ -738,10 +733,9 @@ export default function Navbar() {
                                   className={`
                                     text-lg
                                     transition-transform
-                                    ${
-                                      isSelected
-                                        ? "translate-x-1 text-[#0078ED]"
-                                        : "text-[#5E6B7A]"
+                                    ${isSelected
+                                      ? "translate-x-1 text-[#0078ED]"
+                                      : "text-[#5E6B7A]"
                                     }
                                   `}
                                 >
@@ -1029,10 +1023,9 @@ export default function Navbar() {
                       h-4
                       w-4
                       transition-transform
-                      ${
-                        activeMenu === "how"
-                          ? "rotate-180"
-                          : ""
+                      ${activeMenu === "how"
+                        ? "rotate-180"
+                        : ""
                       }
                     `}
                     fill="none"
@@ -1125,48 +1118,43 @@ export default function Navbar() {
 
                 <button
                   type="button"
+                  onClick={() => navigate("/resources")}
                   className="
-                    flex
-                    items-center
-                    gap-2
-                    whitespace-nowrap
-                    text-[15px]
-                    font-medium
-                    text-[#0B1F3A]
-                    transition-colors
-                    hover:text-[#0078ED]
-                  "
+    flex
+    items-center
+    gap-2
+    whitespace-nowrap
+    text-[15px]
+    font-medium
+    text-[#0B1F3A]
+    transition-colors
+    hover:text-[#0078ED]
+  "
                 >
-
                   Resources
 
                   <svg
                     className={`
-                      h-4
-                      w-4
-                      transition-transform
-                      ${
-                        activeMenu === "resources"
-                          ? "rotate-180"
-                          : ""
+      h-4
+      w-4
+      transition-transform
+      ${activeMenu === "resources"
+                        ? "rotate-180"
+                        : ""
                       }
-                    `}
+    `}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth="1.8"
                   >
-
                     <path
                       d="m6 9 6 6 6-6"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
-
                   </svg>
-
                 </button>
-
 
                 {activeMenu === "resources" && (
 
@@ -1235,11 +1223,10 @@ export default function Navbar() {
                     text-[15px]
                     font-medium
                     transition-colors
-                    ${
-                      isActive
-                        ? "text-[#0078ED]"
-                        : "text-[#0B1F3A] hover:text-[#0078ED]"
-                    }
+                    ${isActive
+                    ? "text-[#0078ED]"
+                    : "text-[#0B1F3A] hover:text-[#0078ED]"
+                  }
                   `
                 }
               >
@@ -1425,9 +1412,8 @@ export default function Navbar() {
                     </span>
 
                     <svg
-                      className={`h-4 w-4 transition-transform ${
-                        profileOpen ? "rotate-180" : ""
-                      }`}
+                      className={`h-4 w-4 transition-transform ${profileOpen ? "rotate-180" : ""
+                        }`}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"

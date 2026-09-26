@@ -21,6 +21,11 @@ import CreatorStore from "./pages/public/CreatorStore.jsx";
 import HowItWorks from "./pages/public/HowItWorks.jsx";
 import About from "./pages/public/About.jsx";
 import Resources from "./pages/public/resources/Resources.jsx";
+import Blog from "./pages/public/resources/Blog.jsx";
+import Guides from "./pages/public/resources/Guides.jsx";
+import SellingTips from "./pages/public/resources/SellingTips.jsx";
+import FAQs from "./pages/public/resources/FAQs.jsx";
+import HelpCenter from "./pages/public/resources/HelpCenter.jsx";
 
 /* =========================================================
    AUTHENTICATION
@@ -74,8 +79,8 @@ import Sellers from "./pages/admin/Sellers.jsx";
 export default function App() {
   const location = useLocation();
   useEffect(() => {
-  window.scrollTo(0, 0);
-}, [location.pathname]);
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   /* =========================================================
      ADMIN PANEL
@@ -169,11 +174,6 @@ export default function App() {
             element={<About />}
           />
 
-          <Route 
-          path="/resources" 
-          element={<Resources />} 
-          />
-
           <Route
             path="/category/:slug"
             element={<Category />}
@@ -197,6 +197,40 @@ export default function App() {
           <Route
             path="/how-it-works"
             element={<HowItWorks />}
+          />
+
+          {/* =================================================
+                 RESOURCES
+          ================================================== */}
+
+          <Route
+            path="/resources"
+            element={<Resources />}
+          />
+
+          <Route
+            path="/resources/blog"
+            element={<Blog />}
+          />
+
+          <Route
+            path="/resources/guides"
+            element={<Guides />}
+          />
+
+          <Route
+            path="/resources/selling-tips"
+            element={<SellingTips />}
+          />
+
+          <Route
+            path="/resources/faqs"
+            element={<FAQs />}
+          />
+
+          <Route
+            path="/resources/help-center"
+            element={<HelpCenter />}
           />
 
           {/* =================================================
