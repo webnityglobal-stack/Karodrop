@@ -542,9 +542,9 @@ export default function Home() {
         className="
           bg-[#F5FAFF]
           px-6
-          py-20
+          py-15
           sm:px-8
-          lg:py-24
+          lg:py-10
         "
       >
 
@@ -696,9 +696,9 @@ export default function Home() {
         className="
           bg-white
           px-6
-          py-20
+          py-6
           sm:px-8
-          lg:py-24
+          lg:py-10
         "
       >
 
@@ -713,7 +713,7 @@ export default function Home() {
             flex-col
             items-start
             justify-between
-            gap-5
+            gap-
             sm:flex-row
             sm:items-end
           "

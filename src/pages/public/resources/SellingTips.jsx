@@ -143,7 +143,7 @@ function SellingTips() {
         <div className="relative mx-auto max-w-[1440px] px-4 py-14 sm:px-6 md:py-20 lg:px-10 lg:py-24">
 
           {/* Breadcrumb */}
-          <div className="mb-8 flex flex-wrap items-center gap-2 text-xs text-[#5E6B7A]">
+          <div className="mb-3 flex flex-wrap items-center gap-2 text- text-[#5E6B7A]">
 
             <Link
               to="/"
@@ -169,12 +169,12 @@ function SellingTips() {
 
           </div>
 
-          <div className="grid gap-12 lg:grid-cols-[1fr_0.75fr] lg:items-center">
+          <div className="grid gap-4 lg:grid-cols-[1fr_0.75fr] lg:items-center">
 
             {/* Hero Content */}
             <div>
 
-              <p className="mb-4 text-xs font-semibold uppercase tracking-[3px] text-[#0078ED]">
+              <p className="mb-2 text- font-semibold uppercase tracking-[3px] text-[#0078ED]">
                 KaroDrop Selling Tips
               </p>
 

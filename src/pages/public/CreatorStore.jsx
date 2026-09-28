@@ -71,8 +71,9 @@ export default function CreatorStore() {
 
               <p
                 className="
+                  py-2
                   mb-6
-                  text-xs
+                  text-
                   font-semibold
                   uppercase
                   tracking-[0.25em]
@@ -512,7 +513,7 @@ export default function CreatorStore() {
 
             <p
               className="
-                text-xs
+                text-
                 font-semibold
                 uppercase
                 tracking-[0.23em]
@@ -652,7 +653,7 @@ export default function CreatorStore() {
 
               <p
                 className="
-                  text-xs
+                  text-
                   font-semibold
                   uppercase
                   tracking-[0.23em]
@@ -816,7 +817,7 @@ export default function CreatorStore() {
 
             <p
               className="
-                text-xs
+                text-
                 font-semibold
                 uppercase
                 tracking-[0.23em]
@@ -952,7 +953,7 @@ export default function CreatorStore() {
 
               <p
                 className="
-                  text-xs
+                  text-
                   font-semibold
                   uppercase
                   tracking-[0.23em]
@@ -1187,7 +1188,7 @@ export default function CreatorStore() {
 
             <p
               className="
-                text-xs
+                text-
                 font-semibold
                 uppercase
                 tracking-[0.25em]

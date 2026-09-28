@@ -459,7 +459,7 @@ function HelpCenter() {
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#0078ED]/10 blur-3xl" />
         <div className="relative mx-auto max-w-[1440px] px-4 py-10 sm:px-6 md:py-10 lg:px-10 lg:py-16">
           {/* Breadcrumb */}
-          <div className="mb-5 flex flex-wrap items-center justify-center gap-2 text-xs text-blue-100/70 lg:justify-start">
+          <div className="mb-5 flex flex-wrap items-center justify-center gap-2 text- text-blue-100/70 lg:justify-start">
             <Link
               to="/"
               className="transition hover:text-white"
@@ -568,7 +568,7 @@ function HelpCenter() {
       ========================================================= */}
       <section className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 md:py-10 lg:px-10">
         <div className="mb-7 text-center">
-          <span className="text-xs font-semibold uppercase tracking-[2px] text-[#0078ED]">
+          <span className="text- font-semibold uppercase tracking-[2px] text-[#0078ED]">
             Browse Help Topics
           </span>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0B1F3A] sm:text-4xl">
@@ -665,7 +665,7 @@ function HelpCenter() {
         <div className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 md:py-10 lg:px-10">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-[2px] text-[#0078ED]">
+              <span className="text- font-semibold uppercase tracking-[2px] text-[#0078ED]">
                 Search-Friendly Answers
               </span>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0B1F3A] sm:text-4xl">
@@ -741,7 +741,7 @@ function HelpCenter() {
       ========================================================= */}
       <section className="mx-auto max-w-[1000px] px-4 py-10 sm:px-6 md:py-10">
         <div className="mb-7 text-center">
-          <span className="text-xs font-semibold uppercase tracking-[2px] text-[#0078ED]">
+          <span className="text- font-semibold uppercase tracking-[2px] text-[#0078ED]">
             Common Questions
           </span>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0B1F3A] sm:text-4xl">
@@ -809,7 +809,7 @@ function HelpCenter() {
       <section className="border-y border-[#DCE7F2] bg-white">
         <div className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 md:py-10 lg:px-10">
           <div className="mb-7 text-center">
-            <span className="text-xs font-semibold uppercase tracking-[2px] text-[#0078ED]">
+            <span className="text- font-semibold uppercase tracking-[2px] text-[#0078ED]">
               Explore KaroDrop Resources
             </span>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0B1F3A] sm:text-4xl">

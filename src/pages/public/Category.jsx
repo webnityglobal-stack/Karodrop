@@ -145,10 +145,10 @@ export default function Category() {
 
         <div className="pointer-events-none absolute -right-40 top-10 h-72 w-72 rounded-full bg-[#EAF4FF] opacity-70 blur-[100px]" />
 
-        <div className="relative mx-auto w-full max-w-[1440px] px-4 py-12 sm:px-6 lg:px-10 lg:py-16">
+        <div className="relative mx-auto w-full max-w-[1440px] px-4 py-12 sm:px-6 lg:px-10 lg:py-10">
 
           {/* Breadcrumb */}
-          <div className="mb-6 flex items-center gap-2 text-xs text-[#5E6B7A]">
+          <div className="mb-6 flex items-center gap-2 text- text-[#5E6B7A]">
 
             <Link
               to="/"
@@ -167,7 +167,7 @@ export default function Category() {
           {/* Heading */}
           <div className="max-w-3xl">
 
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[3px] text-[#0078ED]">
+            <p className="mb-3 text- font-semibold uppercase tracking-[3px] text-[#0078ED]">
               Karodrop Collection
             </p>
 

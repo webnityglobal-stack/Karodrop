@@ -377,13 +377,13 @@ function Guides() {
 
         <div className="pointer-events-none absolute -right-40 top-20 h-96 w-96 rounded-full bg-[#EAF4FF] blur-[110px]" />
 
-        <div className="relative mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20 lg:px-10 lg:py-24">
+        <div className="relative mx-auto max-w-[1440px] px-4 py-12 sm:px-6 md:py-20 lg:px-10 lg:py-10">
 
           {/* Breadcrumb */}
 
           <nav
             aria-label="Breadcrumb"
-            className="mb-8 flex flex-wrap items-center gap-2 text-xs text-[#5E6B7A]"
+            className="mb-3 flex flex-wrap items-center gap-2 text- text-[#5E6B7A]"
           >
 
             <Link
@@ -410,13 +410,13 @@ function Guides() {
 
           </nav>
 
-          <div className="grid gap-12 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+          <div className="grid gap-4 lg:grid-cols-[1fr_0.8fr] lg:items-center">
 
             {/* Hero Content */}
 
             <div>
 
-              <p className="mb-4 text-xs font-semibold uppercase tracking-[3px] text-[#0078ED]">
+              <p className="mb-2 text- font-semibold uppercase tracking-[3px] text-[#0078ED]">
                 KaroDrop Guides
               </p>
 

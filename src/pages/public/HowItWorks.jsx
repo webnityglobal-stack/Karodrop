@@ -4,7 +4,6 @@ import {
   ArrowRight,
   CheckCircle2,
   ChevronDown,
-  ChevronRight,
   Box,
   Building2,
   ClipboardCheck,
@@ -45,6 +44,10 @@ const scrollToHash = (hash) => {
     behavior: "smooth",
   });
 };
+
+/* =========================================================
+   SECTION LINK
+========================================================= */
 
 const SectionLink = ({ href, label }) => {
   return (
@@ -104,15 +107,15 @@ const InfoSection = ({
           w-full
           max-w-7xl
           items-center
-          gap-10
+          gap-8
           px-5
-          py-14
+          py-12
           sm:px-6
-          md:py-16
+          md:py-14
           lg:grid-cols-2
-          lg:gap-14
+          lg:gap-12
           lg:px-10
-          xl:gap-20
+          xl:gap-16
         `}
       >
         {/* =================================================
@@ -128,7 +131,7 @@ const InfoSection = ({
           {eyebrow && (
             <div
               className="
-                mb-6
+                mb-5
                 inline-flex
                 items-center
                 gap-2
@@ -158,9 +161,9 @@ const InfoSection = ({
               tracking-[-0.03em]
               text-[#0A2A6B]
               sm:text-[40px]
-              md:text-[46px]
-              lg:text-[48px]
-              xl:text-[52px]
+              md:text-[44px]
+              lg:text-[46px]
+              xl:text-[50px]
             "
           >
             {title}
@@ -168,19 +171,19 @@ const InfoSection = ({
 
           <p
             className="
-              mt-6
+              mt-5
               max-w-[680px]
-              text-[17px]
-              leading-8
+              text-[16px]
+              leading-7
               text-[#55708F]
-              md:text-[18px]
+              md:text-[17px]
             "
           >
             {description}
           </p>
 
           {points.length > 0 && (
-            <div className="mt-7 space-y-3.5">
+            <div className="mt-6 space-y-2.5">
               {points.map((point, index) => (
                 <div
                   key={index}
@@ -188,19 +191,19 @@ const InfoSection = ({
                     flex
                     items-start
                     gap-3
-                    text-[16px]
+                    text-[15px]
                     font-semibold
-                    leading-7
+                    leading-6
                     text-[#0B1F3A]
                   "
                 >
                   <CheckCircle2
                     className="
-                      mt-[3px]
+                      mt-[2px]
                       shrink-0
                       text-[#0878F9]
                     "
-                    size={22}
+                    size={21}
                     strokeWidth={2}
                   />
 
@@ -211,7 +214,7 @@ const InfoSection = ({
           )}
 
           {buttonText && (
-            <div className="mt-8">
+            <div className="mt-7">
               <Link
                 to={buttonHref}
                 className="
@@ -262,9 +265,9 @@ const InfoSection = ({
               border
               border-[#D9E7F5]
               bg-white
-              p-4
+              p-3.5
               shadow-[0_18px_45px_rgba(11,31,58,0.08)]
-              sm:p-5
+              sm:p-4
               md:rounded-[30px]
             "
           >
@@ -277,7 +280,7 @@ const InfoSection = ({
 };
 
 /* =========================================================
-   VISUAL CARD
+   FEATURE VISUAL
 ========================================================= */
 
 const FeatureVisual = ({
@@ -294,27 +297,27 @@ const FeatureVisual = ({
         rounded-[22px]
         bg-[#EAF4FF]
         p-5
-        sm:p-7
-        md:p-8
+        sm:p-6
+        md:p-7
       "
     >
       <div
         className="
           flex
-          h-[82px]
-          w-[82px]
+          h-[76px]
+          w-[76px]
           items-center
           justify-center
-          rounded-[22px]
+          rounded-[20px]
           bg-[#0878F9]
           text-white
           shadow-[0_12px_25px_rgba(8,120,249,0.18)]
         "
       >
-        <Icon size={38} strokeWidth={1.8} />
+        <Icon size={35} strokeWidth={1.8} />
       </div>
 
-      <div className="mt-6">
+      <div className="mt-5">
         <p
           className="
             text-sm
@@ -329,13 +332,13 @@ const FeatureVisual = ({
 
         <h3
           className="
-            mt-2
-            text-[28px]
+            mt-1.5
+            text-[27px]
             font-extrabold
             leading-tight
             tracking-[-0.02em]
             text-[#0A2A6B]
-            sm:text-[32px]
+            sm:text-[30px]
           "
         >
           {title}
@@ -343,9 +346,9 @@ const FeatureVisual = ({
 
         <p
           className="
-            mt-4
-            text-[16px]
-            leading-7
+            mt-3
+            text-[15px]
+            leading-6
             text-[#55708F]
           "
         >
@@ -356,7 +359,7 @@ const FeatureVisual = ({
       {items.length > 0 && (
         <div
           className="
-            mt-7
+            mt-6
             grid
             grid-cols-1
             gap-3
@@ -371,7 +374,7 @@ const FeatureVisual = ({
                 key={index}
                 className="
                   flex
-                  min-h-[82px]
+                  min-h-[78px]
                   items-center
                   gap-3
                   rounded-2xl
@@ -383,8 +386,8 @@ const FeatureVisual = ({
                 <div
                   className="
                     flex
-                    h-12
-                    w-12
+                    h-11
+                    w-11
                     shrink-0
                     items-center
                     justify-center
@@ -393,12 +396,12 @@ const FeatureVisual = ({
                     text-[#0878F9]
                   "
                 >
-                  <ItemIcon size={22} />
+                  <ItemIcon size={21} />
                 </div>
 
                 <span
                   className="
-                    text-[15px]
+                    text-[14px]
                     font-bold
                     text-[#0B1F3A]
                   "
@@ -445,12 +448,7 @@ const HowItWorks = () => {
           HERO
       ===================================================== */}
 
-      <section
-        className="
-          w-full
-          bg-[#F5FAFF]
-        "
-      >
+      <section className="w-full bg-[#F5FAFF]">
         <div
           className="
             mx-auto
@@ -458,18 +456,23 @@ const HowItWorks = () => {
             w-full
             max-w-7xl
             items-center
-            gap-10
+            gap-8
             px-5
-            py-12
+            py-8
             sm:px-6
-            md:py-14
+            sm:py-10
+            lg:min-h-[calc(100vh-80px)]
             lg:grid-cols-2
-            lg:gap-14
+            lg:gap-10
             lg:px-10
-            xl:gap-20
+            lg:py-8
+            xl:gap-14
           "
         >
-          {/* LEFT */}
+          {/* =================================================
+              LEFT CONTENT
+          ================================================= */}
+
           <div className="min-w-0">
             <div
               className="
@@ -494,32 +497,34 @@ const HowItWorks = () => {
 
             <h1
               className="
-                mt-7
-                max-w-[700px]
-                text-[38px]
+                mt-5
+                max-w-[680px]
+                text-[36px]
                 font-extrabold
-                leading-[1.04]
+                leading-[1.02]
                 tracking-[-0.035em]
                 text-[#0A2A6B]
-                sm:text-[46px]
-                md:text-[52px]
-                lg:text-[50px]
-                xl:text-[56px]
+                sm:text-[44px]
+                md:text-[48px]
+                lg:text-[46px]
+                xl:text-[52px]
               "
             >
-              Turn your designs into
+              Turn your designs
+              <br className="hidden sm:block" />
+              into
               <br className="hidden sm:block" />
               fulfilled products
             </h1>
 
             <p
               className="
-                mt-6
-                max-w-[680px]
-                text-[17px]
-                leading-8
+                mt-5
+                max-w-[650px]
+                text-[16px]
+                leading-7
                 text-[#55708F]
-                md:text-[18px]
+                md:text-[17px]
               "
             >
               With a Print on Demand fulfillment workflow, products can move
@@ -527,8 +532,11 @@ const HowItWorks = () => {
               and delivery after an order is received.
             </p>
 
-            {/* CHECKLIST */}
-            <div className="mt-7 space-y-3">
+            {/* =================================================
+                CHECKLIST
+            ================================================= */}
+
+            <div className="mt-5 space-y-2">
               {[
                 "Select your product",
                 "Prepare your design",
@@ -543,19 +551,20 @@ const HowItWorks = () => {
                     flex
                     items-start
                     gap-3
-                    text-[16px]
+                    text-[15px]
                     font-semibold
-                    leading-7
+                    leading-6
                     text-[#0B1F3A]
                   "
                 >
                   <CheckCircle2
                     className="
-                      mt-[3px]
+                      mt-[2px]
                       shrink-0
                       text-[#0878F9]
                     "
-                    size={22}
+                    size={21}
+                    strokeWidth={2}
                   />
 
                   <span>{item}</span>
@@ -563,8 +572,11 @@ const HowItWorks = () => {
               ))}
             </div>
 
-            {/* BUTTON */}
-            <div className="mt-7">
+            {/* =================================================
+                START SELLING BUTTON
+            ================================================= */}
+
+            <div className="mt-6 pb-1">
               <Link
                 to="/products"
                 className="
@@ -582,8 +594,10 @@ const HowItWorks = () => {
                   text-white
                   shadow-[0_10px_24px_rgba(8,120,249,0.20)]
                   transition
+                  duration-200
                   hover:-translate-y-0.5
                   hover:bg-[#006CEB]
+                  hover:shadow-[0_14px_30px_rgba(8,120,249,0.25)]
                 "
               >
                 Start Selling
@@ -592,19 +606,30 @@ const HowItWorks = () => {
             </div>
           </div>
 
-          {/* RIGHT */}
-          <div className="flex w-full min-w-0 justify-center lg:justify-end">
+          {/* =================================================
+              RIGHT HERO CARD
+          ================================================= */}
+
+          <div
+            className="
+              flex
+              w-full
+              min-w-0
+              justify-center
+              lg:justify-end
+            "
+          >
             <div
               className="
                 w-full
-                max-w-[590px]
+                max-w-[570px]
                 rounded-[28px]
                 border
                 border-[#D9E7F5]
                 bg-white
-                p-4
+                p-3.5
                 shadow-[0_18px_45px_rgba(11,31,58,0.08)]
-                sm:p-5
+                sm:p-4
               "
             >
               <FeatureVisual
@@ -637,19 +662,9 @@ const HowItWorks = () => {
 
       {/* =====================================================
           QUICK NAVIGATION
-          
-          IMPORTANT:
-          No border
-          No sticky
-          No extra strip
       ===================================================== */}
 
-      <section
-        className="
-          w-full
-          bg-white
-        "
-      >
+      <section className="w-full bg-white">
         <div
           className="
             mx-auto
@@ -722,9 +737,9 @@ const HowItWorks = () => {
             w-full
             max-w-7xl
             px-5
-            py-16
+            py-12
             sm:px-6
-            md:py-20
+            md:py-16
             lg:px-10
           "
         >
@@ -744,12 +759,12 @@ const HowItWorks = () => {
             <h2
               className="
                 mt-3
-                text-[34px]
+                text-[32px]
                 font-extrabold
                 leading-tight
                 tracking-[-0.03em]
                 text-[#0A2A6B]
-                sm:text-[42px]
+                sm:text-[40px]
               "
             >
               A simple workflow from idea to delivery
@@ -757,9 +772,9 @@ const HowItWorks = () => {
 
             <p
               className="
-                mt-5
-                text-[17px]
-                leading-8
+                mt-4
+                text-[16px]
+                leading-7
                 text-[#55708F]
               "
             >
@@ -770,9 +785,9 @@ const HowItWorks = () => {
 
           <div
             className="
-              mt-12
+              mt-9
               grid
-              gap-5
+              gap-4
               sm:grid-cols-2
               lg:grid-cols-4
             "
@@ -809,7 +824,7 @@ const HowItWorks = () => {
                     border
                     border-[#DCE7F2]
                     bg-[#F8FBFF]
-                    p-6
+                    p-5
                   "
                 >
                   <div
@@ -829,7 +844,7 @@ const HowItWorks = () => {
 
                   <h3
                     className="
-                      mt-5
+                      mt-4
                       text-lg
                       font-extrabold
                       text-[#0A2A6B]
@@ -1188,9 +1203,9 @@ const HowItWorks = () => {
             w-full
             max-w-7xl
             px-5
-            py-16
+            py-12
             sm:px-6
-            md:py-20
+            md:py-16
             lg:px-10
           "
         >
@@ -1210,11 +1225,11 @@ const HowItWorks = () => {
             <h2
               className="
                 mt-3
-                text-[34px]
+                text-[32px]
                 font-extrabold
                 tracking-[-0.03em]
                 text-[#0A2A6B]
-                sm:text-[42px]
+                sm:text-[40px]
               "
             >
               Built to simplify your ecommerce journey
@@ -1223,9 +1238,9 @@ const HowItWorks = () => {
 
           <div
             className="
-              mt-12
+              mt-9
               grid
-              gap-5
+              gap-4
               sm:grid-cols-2
               lg:grid-cols-4
             "
@@ -1262,7 +1277,7 @@ const HowItWorks = () => {
                     border
                     border-[#DCE7F2]
                     bg-[#F8FBFF]
-                    p-6
+                    p-5
                   "
                 >
                   <div
@@ -1282,7 +1297,7 @@ const HowItWorks = () => {
 
                   <h3
                     className="
-                      mt-5
+                      mt-4
                       text-lg
                       font-extrabold
                       text-[#0A2A6B]
@@ -1326,9 +1341,9 @@ const HowItWorks = () => {
             w-full
             max-w-4xl
             px-5
-            py-16
+            py-12
             sm:px-6
-            md:py-20
+            md:py-16
           "
         >
           <div className="text-center">
@@ -1347,18 +1362,18 @@ const HowItWorks = () => {
             <h2
               className="
                 mt-3
-                text-[34px]
+                text-[32px]
                 font-extrabold
                 tracking-[-0.03em]
                 text-[#0A2A6B]
-                sm:text-[42px]
+                sm:text-[40px]
               "
             >
               Frequently asked questions
             </h2>
           </div>
 
-          <div className="mt-10 space-y-4">
+          <div className="mt-8 space-y-3">
             {[
               {
                 q: "What is Print on Demand?",
@@ -1449,9 +1464,9 @@ const HowItWorks = () => {
             w-full
             max-w-7xl
             px-5
-            py-16
+            py-12
             sm:px-6
-            md:py-20
+            md:py-16
             lg:px-10
           "
         >
@@ -1461,20 +1476,20 @@ const HowItWorks = () => {
               rounded-[30px]
               bg-[#0A2A6B]
               px-6
-              py-12
+              py-10
               text-center
               shadow-[0_20px_50px_rgba(10,42,107,0.15)]
               sm:px-10
-              md:py-14
+              md:py-12
             "
           >
             <h2
               className="
-                text-[32px]
+                text-[30px]
                 font-extrabold
                 tracking-[-0.03em]
                 text-white
-                sm:text-[42px]
+                sm:text-[40px]
               "
             >
               Ready to start selling?
@@ -1483,7 +1498,7 @@ const HowItWorks = () => {
             <p
               className="
                 mx-auto
-                mt-4
+                mt-3
                 max-w-2xl
                 text-[16px]
                 leading-7
@@ -1494,7 +1509,7 @@ const HowItWorks = () => {
               your ecommerce journey.
             </p>
 
-            <div className="mt-7">
+            <div className="mt-6">
               <Link
                 to="/products"
                 className="

@@ -453,7 +453,7 @@ function FAQs() {
 
           <nav
             aria-label="Breadcrumb"
-            className="mb-8 flex flex-wrap items-center gap-2 text-xs text-[#5E6B7A]"
+            className="mb-3 flex flex-wrap items-center gap-2 text- text-[#5E6B7A]"
           >
 
             <Link
@@ -480,13 +480,13 @@ function FAQs() {
 
           </nav>
 
-          <div className="grid gap-12 lg:grid-cols-[1fr_0.7fr] lg:items-center">
+          <div className="grid gap-4 lg:grid-cols-[1fr_0.7fr] lg:items-center">
 
             {/* Hero Content */}
 
             <div>
 
-              <p className="mb-4 text-xs font-semibold uppercase tracking-[3px] text-[#0078ED]">
+              <p className="mb-2 text- font-semibold uppercase tracking-[3px] text-[#0078ED]">
                 KaroDrop FAQs
               </p>
 
@@ -625,11 +625,11 @@ function FAQs() {
 
       <section className="bg-[#F5FAFF]">
 
-        <div className="mx-auto max-w-[1100px] px-4 py-12 sm:px-6 md:py-16">
+        <div className="mx-auto max-w-[1100px] px-4 py-0 sm:px-6 md:py-0">
 
           <div className="rounded-3xl border border-[#DCE7F2] bg-white p-6 sm:p-8 lg:p-10">
 
-            <p className="text-xs font-semibold uppercase tracking-[2px] text-[#0078ED]">
+            <p className="text font-semibold uppercase tracking-[2px] text-[#0078ED]">
               Dropshipping Knowledge Hub
             </p>
 
@@ -700,7 +700,7 @@ function FAQs() {
 
         <div className="mb-10">
 
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[2px] text-[#0078ED]">
+          <p className="mb-4 text- font-semibold uppercase tracking-[2px] text-[#0078ED]">
             Browse By Topic
           </p>
 
@@ -964,11 +964,11 @@ function FAQs() {
 
       <section className="border-y border-[#DCE7F2] bg-white">
 
-        <div className="mx-auto max-w-[1200px] px-4 py-14 sm:px-6 md:py-20">
+        <div className="mx-auto max-w-[1200px] px-4 py-10 sm:px-6 md:py-10">
 
           <div className="mb-10 max-w-3xl">
 
-            <p className="text-xs font-semibold uppercase tracking-[2px] text-[#0078ED]">
+            <p className="text- font-semibold uppercase tracking-[2px] text-[#0078ED]">
               Helpful Topics
             </p>
 
@@ -1047,11 +1047,11 @@ function FAQs() {
 
       <section className="bg-[#F5FAFF]">
 
-        <div className="mx-auto max-w-[1200px] px-4 py-14 sm:px-6 md:py-20">
+        <div className="mx-auto max-w-[1200px] px-4 py-2 sm:px-6 md:py-5">
 
           <div className="mb-10 text-center">
 
-            <p className="text-xs font-semibold uppercase tracking-[2px] text-[#0078ED]">
+            <p className="text- font-semibold uppercase tracking-[2px] text-[#0078ED]">
               Need More Help?
             </p>
 
@@ -1187,7 +1187,7 @@ function FAQs() {
           CTA
       ====================================================== */}
 
-      <section className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 md:py-20 lg:px-10">
+      <section className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 md:py-10 lg:px-10">
 
         <div className="overflow-hidden rounded-3xl bg-[#012467] px-6 py-12 text-center sm:px-10 lg:px-16 lg:py-16">
 

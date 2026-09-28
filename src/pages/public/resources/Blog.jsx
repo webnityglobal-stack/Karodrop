@@ -351,13 +351,13 @@ function Blog() {
 
         <div className="pointer-events-none absolute -right-40 top-10 h-96 w-96 rounded-full bg-[#EAF4FF] blur-[110px]" />
 
-        <div className="relative mx-auto max-w-[1440px] px-4 py-14 sm:px-6 md:py-20 lg:px-10 lg:py-24">
+        <div className="relative mx-auto max-w-[1440px] px-4 py-14 sm:px-6 md:py-20 lg:px-10 lg:py-10">
 
           {/* BREADCRUMB */}
 
           <nav
             aria-label="Breadcrumb"
-            className="mb-8 flex flex-wrap items-center gap-2 text-xs text-[#5E6B7A]"
+            className="mb-8 flex flex-wrap items-center gap-2 text- text-[#5E6B7A]"
           >
 
             <Link
@@ -386,7 +386,7 @@ function Blog() {
 
           <div className="max-w-5xl">
 
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[3px] text-[#0078ED]">
+            <p className="mb-4 text- font-semibold uppercase tracking-[3px] text-[#0078ED]">
               KaroDrop Blog
             </p>
 

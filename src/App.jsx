@@ -20,7 +20,6 @@ import OrderSuccess from "./pages/public/OrderSuccess.jsx";
 import CreatorStore from "./pages/public/CreatorStore.jsx";
 import HowItWorks from "./pages/public/HowItWorks.jsx";
 import About from "./pages/public/About.jsx";
-import Resources from "./pages/public/resources/Resources.jsx";
 import Blog from "./pages/public/resources/Blog.jsx";
 import Guides from "./pages/public/resources/Guides.jsx";
 import SellingTips from "./pages/public/resources/SellingTips.jsx";
@@ -202,11 +201,6 @@ export default function App() {
           {/* =================================================
                  RESOURCES
           ================================================== */}
-
-          <Route
-            path="/resources"
-            element={<Resources />}
-          />
 
           <Route
             path="/resources/blog"
