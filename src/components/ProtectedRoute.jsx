@@ -91,7 +91,7 @@ export default function ProtectedRoute({
   if (allowedRole && user?.role !== allowedRole) {
     // Seller ko customer page par jane se roko
     if (user?.role === "seller") {
-      return <Navigate to="/dashboard" replace />;
+      return <Navigate to="/seller/dashboard" replace />;
     }
 
     // Customer ko seller/admin page par jane se roko

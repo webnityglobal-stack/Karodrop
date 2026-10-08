@@ -1,9 +1,20 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+
+/* =========================================================
+   SELLER LAYOUT
+========================================================= */
+
+import SellerLayout from "./components/seller/SellerLayout.jsx";
 
 /* =========================================================
    PUBLIC PAGES
@@ -20,6 +31,7 @@ import OrderSuccess from "./pages/public/OrderSuccess.jsx";
 import CreatorStore from "./pages/public/CreatorStore.jsx";
 import HowItWorks from "./pages/public/HowItWorks.jsx";
 import About from "./pages/public/About.jsx";
+
 import Blog from "./pages/public/resources/Blog.jsx";
 import Guides from "./pages/public/resources/Guides.jsx";
 import SellingTips from "./pages/public/resources/SellingTips.jsx";
@@ -32,7 +44,7 @@ import HelpCenter from "./pages/public/resources/HelpCenter.jsx";
 
 import Login from "./pages/auth/Login.jsx";
 import Signup from "./pages/auth/Signup.jsx";
-import AdminLogin from "./pages/auth/AdminLogin";
+import AdminLogin from "./pages/auth/AdminLogin.jsx";
 
 /* =========================================================
    CUSTOMER PANEL
@@ -72,11 +84,43 @@ import AdminSettings from "./pages/admin/Settings.jsx";
 import Sellers from "./pages/admin/Sellers.jsx";
 
 /* =========================================================
+   SELLER PANEL
+========================================================= */
+
+import SellerDashboard from "./pages/seller/SellerDashboard.jsx";
+import SellerProducts from "./pages/seller/SellerProducts.jsx";
+import AddProduct from "./pages/seller/AddProduct.jsx";
+import EditProduct from "./pages/seller/EditProduct.jsx";
+
+import SellerOrders from "./pages/seller/SellerOrders.jsx";
+import SellerOrderDetails from "./pages/seller/SellerOrderDetails.jsx";
+
+import SellerStore from "./pages/seller/SellerStore.jsx";
+import SellerCustomers from "./pages/seller/SellerCustomers.jsx";
+
+import SellerEarnings from "./pages/seller/SellerEarnings.jsx";
+import SellerPayouts from "./pages/seller/SellerPayouts.jsx";
+
+import SellerAnalytics from "./pages/seller/SellerAnalytics.jsx";
+import SellerInventory from "./pages/seller/SellerInventory.jsx";
+
+import SellerDesigns from "./pages/seller/SellerDesigns.jsx";
+import SellerNotifications from "./pages/seller/SellerNotifications.jsx";
+import SellerHelp from "./pages/seller/SellerHelp.jsx";
+
+import SellerSettings from "./pages/seller/SellerSettings.jsx";
+
+/* =========================================================
    APP
 ========================================================= */
 
 export default function App() {
   const location = useLocation();
+
+  /* =========================================================
+     SCROLL TO TOP
+  ========================================================= */
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
@@ -91,8 +135,6 @@ export default function App() {
 
   /* =========================================================
      CUSTOMER PANEL
-
-     In pages par public Navbar/Footer hide rahega.
   ========================================================= */
 
   const isCustomerPanel =
@@ -136,11 +178,24 @@ export default function App() {
     location.pathname.startsWith("/integrations/");
 
   /* =========================================================
+     SELLER PANEL
+
+     Public Navbar/Footer seller pages par hide rahega.
+     SellerLayout apna Sidebar + Header provide karega.
+  ========================================================= */
+
+  const isSellerPanel =
+    location.pathname === "/seller" ||
+    location.pathname.startsWith("/seller/");
+
+  /* =========================================================
      HIDE PUBLIC NAVBAR / FOOTER
   ========================================================= */
 
   const hidePublicLayout =
-    isAdminPanel || isCustomerPanel;
+    isAdminPanel ||
+    isCustomerPanel ||
+    isSellerPanel;
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -199,7 +254,7 @@ export default function App() {
           />
 
           {/* =================================================
-                 RESOURCES
+              RESOURCES
           ================================================== */}
 
           <Route
@@ -228,7 +283,7 @@ export default function App() {
           />
 
           {/* =================================================
-              AUTH
+              AUTHENTICATION
           ================================================== */}
 
           <Route
@@ -453,6 +508,197 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* =================================================
+              SELLER PANEL
+          ================================================== */}
+
+          <Route
+            path="/seller"
+            element={
+              <ProtectedRoute allowedRole="seller">
+                <SellerLayout />
+              </ProtectedRoute>
+            }
+          >
+
+            {/* =================================================
+                SELLER ROOT
+                /seller
+                -> /seller/dashboard
+            ================================================== */}
+
+            <Route
+              index
+              element={
+                <Navigate
+                  to="dashboard"
+                  replace
+                />
+              }
+            />
+
+            {/* =================================================
+                SELLER DASHBOARD
+                /seller/dashboard
+            ================================================== */}
+
+            <Route
+              path="dashboard"
+              element={<SellerDashboard />}
+            />
+
+            {/* =================================================
+                SELLER PRODUCTS
+                /seller/products
+            ================================================== */}
+
+            <Route
+              path="products"
+              element={<SellerProducts />}
+            />
+
+            {/* =================================================
+                ADD PRODUCT
+                /seller/products/add
+            ================================================== */}
+
+            <Route
+              path="products/add"
+              element={<AddProduct />}
+            />
+
+            {/* =================================================
+                EDIT PRODUCT
+                /seller/products/edit/:id
+            ================================================== */}
+
+            <Route
+              path="products/edit/:id"
+              element={<EditProduct />}
+            />
+
+            {/* =================================================
+                SELLER ORDERS
+                /seller/orders
+            ================================================== */}
+
+            <Route
+              path="orders"
+              element={<SellerOrders />}
+            />
+
+            {/* =================================================
+                SELLER ORDER DETAILS
+                /seller/orders/:id
+            ================================================== */}
+
+            <Route
+              path="orders/:id"
+              element={<SellerOrderDetails />}
+            />
+
+            {/* =================================================
+                SELLER STORE
+                /seller/store
+            ================================================== */}
+
+            <Route
+              path="store"
+              element={<SellerStore />}
+            />
+
+            {/* =================================================
+                SELLER CUSTOMERS
+                /seller/customers
+            ================================================== */}
+
+            <Route
+              path="customers"
+              element={<SellerCustomers />}
+            />
+
+            {/* =================================================
+                SELLER EARNINGS
+                /seller/earnings
+            ================================================== */}
+
+            <Route
+              path="earnings"
+              element={<SellerEarnings />}
+            />
+
+            {/* =================================================
+                SELLER PAYOUTS
+                /seller/payouts
+            ================================================== */}
+
+            <Route
+              path="payouts"
+              element={<SellerPayouts />}
+            />
+
+            {/* =================================================
+                SELLER ANALYTICS
+                /seller/analytics
+            ================================================== */}
+
+            <Route
+              path="analytics"
+              element={<SellerAnalytics />}
+            />
+
+            {/* =================================================
+                SELLER INVENTORY
+                /seller/inventory
+            ================================================== */}
+
+            <Route
+              path="inventory"
+              element={<SellerInventory />}
+            />
+
+            {/* =================================================
+                SELLER DESIGNS
+                /seller/designs
+            ================================================== */}
+
+            <Route
+              path="designs"
+              element={<SellerDesigns />}
+            />
+
+            {/* =================================================
+                SELLER NOTIFICATIONS
+                /seller/notifications
+            ================================================== */}
+
+            <Route
+              path="notifications"
+              element={<SellerNotifications />}
+            />
+
+            {/* =================================================
+                SELLER HELP
+                /seller/help
+            ================================================== */}
+
+            <Route
+              path="help"
+              element={<SellerHelp />}
+            />
+
+            {/* =================================================
+                SELLER SETTINGS
+                /seller/settings
+            ================================================== */}
+
+            <Route
+              path="settings"
+              element={<SellerSettings />}
+            />
+
+          </Route>
 
           {/* =================================================
               ADMIN DASHBOARD

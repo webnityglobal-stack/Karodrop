@@ -29,9 +29,9 @@ function getCustomerId(user) {
 
   return String(
     user._id ||
-      user.id ||
-      user.email ||
-      ""
+    user.id ||
+    user.email ||
+    ""
   ).toLowerCase();
 }
 
@@ -54,10 +54,10 @@ function getCustomerOrders() {
     return savedOrders.filter((order) => {
       const orderCustomerId = String(
         order.customerId ||
-          order.userId ||
-          order.customerEmail ||
-          order.email ||
-          ""
+        order.userId ||
+        order.customerEmail ||
+        order.email ||
+        ""
       ).toLowerCase();
 
       return orderCustomerId === customerId;
@@ -130,8 +130,8 @@ function getItems(order) {
 function getItemQuantity(item) {
   return Number(
     item.qty ||
-      item.quantity ||
-      1
+    item.quantity ||
+    1
   );
 }
 
@@ -163,7 +163,7 @@ function getOrderAmount(order) {
     return (
       total +
       Number(item.price || 0) *
-        getItemQuantity(item)
+      getItemQuantity(item)
     );
   }, 0);
 }
@@ -659,6 +659,22 @@ export default function Orders() {
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
 
           <div>
+            {/* BACK BUTTON */}
+            <button
+              type="button"
+              onClick={() => navigate("/account")}
+              className="mb-4 inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+              style={{ color: BLUE }}
+              onMouseEnter={(event) => {
+                event.currentTarget.style.color = NAVY;
+              }}
+              onMouseLeave={(event) => {
+                event.currentTarget.style.color = BLUE;
+              }}
+            >
+              <span className="text-lg leading-none">←</span>
+              Back to Dashboard
+            </button>
             <p
               className="text-xs uppercase tracking-[0.18em] font-semibold mb-2"
               style={{ color: BLUE }}
@@ -1067,46 +1083,46 @@ function OrderCard({
           {(getTrackingNumber(order) ||
             getCourierName(order) ||
             getEstimatedDelivery(order)) && (
-            <div
-              className="rounded-xl p-3 md:max-w-[360px]"
-              style={{
-                backgroundColor: PAGE_BG,
-                border: `1px solid ${BORDER}`,
-              }}
-            >
-              <p
-                className="text-[10px] uppercase tracking-wide font-semibold"
-                style={{ color: MUTED }}
+              <div
+                className="rounded-xl p-3 md:max-w-[360px]"
+                style={{
+                  backgroundColor: PAGE_BG,
+                  border: `1px solid ${BORDER}`,
+                }}
               >
-                Shipment
-              </p>
+                <p
+                  className="text-[10px] uppercase tracking-wide font-semibold"
+                  style={{ color: MUTED }}
+                >
+                  Shipment
+                </p>
 
-              <div className="mt-1.5 space-y-1">
-                {getTrackingNumber(order) && (
-                  <p className="text-xs" style={{ color: TEXT }}>
-                    <span style={{ color: MUTED }}>Tracking:</span>{" "}
-                    <span className="font-semibold">
-                      {getTrackingNumber(order)}
-                    </span>
-                  </p>
-                )}
+                <div className="mt-1.5 space-y-1">
+                  {getTrackingNumber(order) && (
+                    <p className="text-xs" style={{ color: TEXT }}>
+                      <span style={{ color: MUTED }}>Tracking:</span>{" "}
+                      <span className="font-semibold">
+                        {getTrackingNumber(order)}
+                      </span>
+                    </p>
+                  )}
 
-                {getCourierName(order) && (
-                  <p className="text-xs" style={{ color: TEXT }}>
-                    <span style={{ color: MUTED }}>Courier:</span>{" "}
-                    {getCourierName(order)}
-                  </p>
-                )}
+                  {getCourierName(order) && (
+                    <p className="text-xs" style={{ color: TEXT }}>
+                      <span style={{ color: MUTED }}>Courier:</span>{" "}
+                      {getCourierName(order)}
+                    </p>
+                  )}
 
-                {getEstimatedDelivery(order) && (
-                  <p className="text-xs" style={{ color: TEXT }}>
-                    <span style={{ color: MUTED }}>Expected:</span>{" "}
-                    {formatDate(getEstimatedDelivery(order))}
-                  </p>
-                )}
+                  {getEstimatedDelivery(order) && (
+                    <p className="text-xs" style={{ color: TEXT }}>
+                      <span style={{ color: MUTED }}>Expected:</span>{" "}
+                      {formatDate(getEstimatedDelivery(order))}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* ACTIONS */}
 
@@ -1128,17 +1144,17 @@ function OrderCard({
 
             {statusKey !==
               "cancelled" && (
-              <button
-                type="button"
-                onClick={onNeedHelp}
-                className="px-4 py-2.5 rounded-lg text-white text-xs font-semibold"
-                style={{
-                  backgroundColor: BLUE,
-                }}
-              >
-                Need Help
-              </button>
-            )}
+                <button
+                  type="button"
+                  onClick={onNeedHelp}
+                  className="px-4 py-2.5 rounded-lg text-white text-xs font-semibold"
+                  style={{
+                    backgroundColor: BLUE,
+                  }}
+                >
+                  Need Help
+                </button>
+              )}
           </div>
         </div>
 
@@ -1146,10 +1162,10 @@ function OrderCard({
 
         {statusKey !==
           "cancelled" && (
-          <MiniProgress
-            status={order.status}
-          />
-        )}
+            <MiniProgress
+              status={order.status}
+            />
+          )}
       </div>
     </div>
   );
@@ -1197,26 +1213,26 @@ function MiniProgress({ status }) {
 
                 {index <
                   TIMELINE.length - 1 && (
-                  <div
-                    className="flex-1 h-px mx-1"
-                    style={{
-                      backgroundColor:
-                        BORDER,
-                    }}
-                  >
                     <div
-                      className="h-full"
+                      className="flex-1 h-px mx-1"
                       style={{
-                        width:
-                          index < progress
-                            ? "100%"
-                            : "0%",
                         backgroundColor:
-                          BLUE,
+                          BORDER,
                       }}
-                    />
-                  </div>
-                )}
+                    >
+                      <div
+                        className="h-full"
+                        style={{
+                          width:
+                            index < progress
+                              ? "100%"
+                              : "0%",
+                          backgroundColor:
+                            BLUE,
+                        }}
+                      />
+                    </div>
+                  )}
               </React.Fragment>
             );
           }
@@ -1271,11 +1287,10 @@ function MiniProgress({ status }) {
           <div
             className="h-full rounded-full"
             style={{
-              width: `${
-                ((progress + 1) /
+              width: `${((progress + 1) /
                   TIMELINE.length) *
                 100
-              }%`,
+                }%`,
               backgroundColor: BLUE,
             }}
           />
@@ -1438,18 +1453,18 @@ function OrderDetailsModal({
 
                         {index <
                           TIMELINE.length -
-                            1 && (
-                          <div
-                            className="w-px h-10"
-                            style={{
-                              backgroundColor:
-                                index <
-                                progress
-                                  ? BLUE
-                                  : BORDER,
-                            }}
-                          />
-                        )}
+                          1 && (
+                            <div
+                              className="w-px h-10"
+                              style={{
+                                backgroundColor:
+                                  index <
+                                    progress
+                                    ? BLUE
+                                    : BORDER,
+                              }}
+                            />
+                          )}
                       </div>
 
                       <div className="pb-5">
@@ -1460,8 +1475,8 @@ function OrderDetailsModal({
                             color: active
                               ? BLUE
                               : completed
-                              ? TEXT
-                              : "#7B8794",
+                                ? TEXT
+                                : "#7B8794",
                           }}
                         >
                           {step.label}
@@ -1503,93 +1518,93 @@ function OrderDetailsModal({
           getCourierName(order) ||
           getEstimatedDelivery(order) ||
           order.trackingUrl) && (
-          <div className="mt-6">
-            <h3
-              className="text-sm font-semibold mb-3"
-              style={{ color: TEXT }}
-            >
-              Shipment Details
-            </h3>
+            <div className="mt-6">
+              <h3
+                className="text-sm font-semibold mb-3"
+                style={{ color: TEXT }}
+              >
+                Shipment Details
+              </h3>
 
-            <div
-              className="rounded-xl p-4"
-              style={{
-                backgroundColor: LIGHT_BLUE,
-                border: `1px solid ${BORDER}`,
-              }}
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <p
-                    className="text-[11px] uppercase tracking-wide font-semibold"
-                    style={{ color: MUTED }}
-                  >
-                    Tracking Number
-                  </p>
-                  <p
-                    className="text-sm font-semibold mt-1 break-all"
-                    style={{ color: TEXT }}
-                  >
-                    {getTrackingNumber(order) || "Not assigned yet"}
-                  </p>
+              <div
+                className="rounded-xl p-4"
+                style={{
+                  backgroundColor: LIGHT_BLUE,
+                  border: `1px solid ${BORDER}`,
+                }}
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <p
+                      className="text-[11px] uppercase tracking-wide font-semibold"
+                      style={{ color: MUTED }}
+                    >
+                      Tracking Number
+                    </p>
+                    <p
+                      className="text-sm font-semibold mt-1 break-all"
+                      style={{ color: TEXT }}
+                    >
+                      {getTrackingNumber(order) || "Not assigned yet"}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p
+                      className="text-[11px] uppercase tracking-wide font-semibold"
+                      style={{ color: MUTED }}
+                    >
+                      Courier
+                    </p>
+                    <p
+                      className="text-sm font-semibold mt-1"
+                      style={{ color: TEXT }}
+                    >
+                      {getCourierName(order) || "Not assigned yet"}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p
+                      className="text-[11px] uppercase tracking-wide font-semibold"
+                      style={{ color: MUTED }}
+                    >
+                      Expected Delivery
+                    </p>
+                    <p
+                      className="text-sm font-semibold mt-1"
+                      style={{ color: TEXT }}
+                    >
+                      {getEstimatedDelivery(order)
+                        ? formatDate(getEstimatedDelivery(order))
+                        : "Will be updated soon"}
+                    </p>
+                  </div>
                 </div>
 
-                <div>
-                  <p
-                    className="text-[11px] uppercase tracking-wide font-semibold"
-                    style={{ color: MUTED }}
+                {getTrackingNumber(order) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (navigator?.clipboard?.writeText) {
+                        navigator.clipboard.writeText(
+                          getTrackingNumber(order)
+                        );
+                      }
+                    }}
+                    className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-lg text-xs font-semibold"
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      color: NAVY,
+                      border: `1px solid ${BORDER}`,
+                    }}
                   >
-                    Courier
-                  </p>
-                  <p
-                    className="text-sm font-semibold mt-1"
-                    style={{ color: TEXT }}
-                  >
-                    {getCourierName(order) || "Not assigned yet"}
-                  </p>
-                </div>
-
-                <div>
-                  <p
-                    className="text-[11px] uppercase tracking-wide font-semibold"
-                    style={{ color: MUTED }}
-                  >
-                    Expected Delivery
-                  </p>
-                  <p
-                    className="text-sm font-semibold mt-1"
-                    style={{ color: TEXT }}
-                  >
-                    {getEstimatedDelivery(order)
-                      ? formatDate(getEstimatedDelivery(order))
-                      : "Will be updated soon"}
-                  </p>
-                </div>
+                    Copy Tracking Number
+                  </button>
+                )}
               </div>
-
-              {getTrackingNumber(order) && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (navigator?.clipboard?.writeText) {
-                      navigator.clipboard.writeText(
-                        getTrackingNumber(order)
-                      );
-                    }
-                  }}
-                  className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-lg text-xs font-semibold"
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    color: NAVY,
-                    border: `1px solid ${BORDER}`,
-                  }}
-                >
-                  Copy Tracking Number
-                </button>
-              )}
             </div>
-          </div>
-        )}
+          )}
 
         {/* PAYMENT */}
 
@@ -1676,7 +1691,7 @@ function OrderDetailsModal({
                     style={{
                       borderBottom:
                         index <
-                        items.length - 1
+                          items.length - 1
                           ? `1px solid ${BORDER}`
                           : "none",
                     }}
@@ -1728,18 +1743,18 @@ function OrderDetailsModal({
 
                       {item.price !==
                         undefined && (
-                        <p
-                          className="text-xs mt-1"
-                          style={{
-                            color: MUTED,
-                          }}
-                        >
-                          {formatCurrency(
-                            item.price
-                          )}{" "}
-                          each
-                        </p>
-                      )}
+                          <p
+                            className="text-xs mt-1"
+                            style={{
+                              color: MUTED,
+                            }}
+                          >
+                            {formatCurrency(
+                              item.price
+                            )}{" "}
+                            each
+                          </p>
+                        )}
                     </div>
 
                     <p
@@ -1750,9 +1765,9 @@ function OrderDetailsModal({
                         Number(
                           item.price || 0
                         ) *
-                          getItemQuantity(
-                            item
-                          )
+                        getItemQuantity(
+                          item
+                        )
                       )}
                     </p>
                   </div>
@@ -1826,14 +1841,14 @@ function OrderDetailsModal({
 
               {order.shippingAddress
                 .phone && (
-                <p>
-                  Phone:{" "}
-                  {
-                    order.shippingAddress
-                      .phone
-                  }
-                </p>
-              )}
+                  <p>
+                    Phone:{" "}
+                    {
+                      order.shippingAddress
+                        .phone
+                    }
+                  </p>
+                )}
             </div>
           </div>
         )}
@@ -1904,8 +1919,8 @@ function OrderDetailsModal({
               {order.trackingUrl
                 ? "Track Shipment →"
                 : getTrackingNumber(order)
-                ? "Tracking Link Not Available"
-                : "Tracking Not Available"}
+                  ? "Tracking Link Not Available"
+                  : "Tracking Not Available"}
             </button>
           )}
         </div>

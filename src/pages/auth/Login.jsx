@@ -66,9 +66,45 @@ export default function Login() {
     }
 
     /*
-     * Store only safe information
-     * Password is NOT stored in current session.
+     * ==========================================
+     * ADMIN LOGIN
+     * ==========================================
      */
+
+    if (user.role === "admin") {
+      const adminSession = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: "admin",
+      };
+
+      // Remove customer/seller session
+      localStorage.removeItem("karodrop-user");
+
+      // Save admin session
+      localStorage.setItem(
+        "karodrop-admin",
+        JSON.stringify(adminSession)
+      );
+
+      window.dispatchEvent(new Event("adminChanged"));
+
+      setLoading(false);
+
+      navigate("/admin", {
+        replace: true,
+      });
+
+      return;
+    }
+
+    /*
+     * ==========================================
+     * CUSTOMER / SELLER LOGIN
+     * ==========================================
+     */
+
     const currentUser = {
       id: user.id,
       name: user.name,
@@ -77,31 +113,26 @@ export default function Login() {
       phone: user.phone || "",
       businessName: user.businessName || "",
       address: user.address || "",
+      profileImage: user.profileImage || "",
     };
 
+    // Remove admin session
+    localStorage.removeItem("karodrop-admin");
+
+    // Save customer / seller session
     localStorage.setItem(
       "karodrop-user",
       JSON.stringify(currentUser)
     );
 
-    // Notify other parts of the application
+    // Notify Navbar and other components
     window.dispatchEvent(new Event("userChanged"));
 
-    /*
-     * Admin → Admin Panel
-     * Customer/Seller → Home Page
-     *
-     * Dashboard will be available
-     * from the logged-in profile menu.
-     */
-    if (user.role === "admin") {
-      setLoading(false);
-      navigate("/admin", { replace: true });
-      return;
-    }
-
     setLoading(false);
-    navigate("/", { replace: true });
+
+    navigate("/", {
+      replace: true,
+    });
   };
 
   return (

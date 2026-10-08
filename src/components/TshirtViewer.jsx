@@ -13,7 +13,6 @@ import {
   Html,
   useGLTF,
   useTexture,
-  Decal,
 } from "@react-three/drei";
 
 import * as THREE from "three";
@@ -25,42 +24,42 @@ import * as THREE from "three";
 const PLACEMENTS = {
   Front: {
     modelRotation: 0,
-    position: [0, 0.05, 0.34],
+    position: [0, 0.05, 0.36],
     rotation: [0, 0, 0],
     scale: [0.42, 0.42, 0.42],
   },
 
   Back: {
     modelRotation: Math.PI,
-    position: [0, 0.05, 0.34],
+    position: [0, 0.05, 0.36],
     rotation: [0, 0, 0],
     scale: [0.42, 0.42, 0.42],
   },
 
   "Left Chest": {
     modelRotation: 0,
-    position: [-0.16, 0.15, 0.36],
+    position: [-0.16, 0.15, 0.38],
     rotation: [0, 0, 0],
     scale: [0.20, 0.20, 0.20],
   },
 
   "Right Chest": {
     modelRotation: 0,
-    position: [0.16, 0.15, 0.36],
+    position: [0.16, 0.15, 0.38],
     rotation: [0, 0, 0],
     scale: [0.20, 0.20, 0.20],
   },
 
   "Left Shoulder": {
     modelRotation: 0,
-    position: [-0.32, 0.28, 0.28],
+    position: [-0.32, 0.28, 0.30],
     rotation: [0, 0, -0.15],
     scale: [0.17, 0.17, 0.17],
   },
 
   "Right Shoulder": {
     modelRotation: 0,
-    position: [0.32, 0.28, 0.28],
+    position: [0.32, 0.28, 0.30],
     rotation: [0, 0, 0.15],
     scale: [0.17, 0.17, 0.17],
   },
@@ -81,7 +80,66 @@ function Loader() {
 }
 
 /* =========================================================
-   T-SHIRT MODEL + DECAL
+   DESIGN OVERLAY
+   ---------------------------------------------------------
+   IMPORTANT:
+   We intentionally do NOT use Drei <Decal> here.
+
+   The previous Decal implementation was causing:
+
+   "Decal must have a Mesh as parent or specify its mesh prop"
+
+   Instead, the uploaded design is rendered as a transparent
+   textured plane slightly in front of the T-shirt.
+========================================================= */
+
+function DesignOverlay({
+  designImage,
+  position,
+  rotation,
+  scale,
+}) {
+  const texture = useTexture(designImage);
+
+  useEffect(() => {
+    if (!texture) return;
+
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 8;
+    texture.needsUpdate = true;
+
+    return () => {
+      // Do not dispose here.
+      // Drei/useTexture manages the texture cache.
+    };
+  }, [texture]);
+
+  return (
+    <mesh
+      position={position}
+      rotation={rotation}
+      scale={scale}
+      renderOrder={10}
+    >
+      <planeGeometry args={[1, 1]} />
+
+      <meshBasicMaterial
+        map={texture}
+        transparent
+        alphaTest={0.01}
+        side={THREE.DoubleSide}
+        depthTest
+        depthWrite={false}
+        polygonOffset
+        polygonOffsetFactor={-2}
+        toneMapped={false}
+      />
+    </mesh>
+  );
+}
+
+/* =========================================================
+   T-SHIRT MODEL
 ========================================================= */
 
 function TshirtModel({
@@ -92,51 +150,61 @@ function TshirtModel({
 }) {
   const { scene } = useGLTF(modelPath);
 
-  const meshRef = useRef(null);
-
   /*
-   * Normalize the original GLB.
-   *
-   * This is important because your downloaded GLB
-   * has a very large internal scale.
+   * Clone and normalize the GLB.
    */
-  const { model, mesh, modelScale } = useMemo(() => {
+  const { model, modelScale } = useMemo(() => {
     const clonedScene = scene.clone(true);
 
-    let targetMesh = null;
-
+    /*
+     * Apply product color to every mesh material.
+     */
     clonedScene.traverse((child) => {
       if (!child.isMesh) return;
-
-      if (!targetMesh) {
-        targetMesh = child;
-      }
 
       child.castShadow = true;
       child.receiveShadow = true;
 
       if (child.material) {
-        child.material = child.material.clone();
+        /*
+         * Some GLB files can contain multiple materials.
+         */
+        if (Array.isArray(child.material)) {
+          child.material = child.material.map((material) => {
+            const clonedMaterial = material.clone();
 
-        if (child.material.color) {
-          child.material.color.set(
-            productColor || "#ffffff"
-          );
+            if (clonedMaterial.color) {
+              clonedMaterial.color.set(
+                productColor || "#ffffff"
+              );
+            }
+
+            clonedMaterial.needsUpdate = true;
+
+            return clonedMaterial;
+          });
+        } else {
+          child.material = child.material.clone();
+
+          if (child.material.color) {
+            child.material.color.set(
+              productColor || "#ffffff"
+            );
+          }
+
+          child.material.needsUpdate = true;
         }
-
-        child.material.needsUpdate = true;
       }
     });
 
     /*
-     * Calculate model bounding box.
+     * Calculate bounding box.
      */
     const box = new THREE.Box3().setFromObject(
       clonedScene
     );
 
     const size = new THREE.Vector3();
-
     const center = new THREE.Vector3();
 
     box.getSize(size);
@@ -167,69 +235,35 @@ function TshirtModel({
 
     return {
       model: clonedScene,
-      mesh: targetMesh,
       modelScale: normalizedScale,
     };
   }, [scene, productColor]);
-
-  const transparentTexture =
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=";
-
-  /*
-   * Always load a texture.
-   * If user hasn't uploaded design yet,
-   * use a transparent 1x1 texture.
-   */
-  const texture = useTexture(
-    designImage || transparentTexture
-  );
-
-  useEffect(() => {
-    if (!texture) return;
-
-    texture.colorSpace =
-      THREE.SRGBColorSpace;
-
-    texture.anisotropy = 8;
-
-    texture.needsUpdate = true;
-  }, [texture]);
 
   const config =
     PLACEMENTS[placement] ||
     PLACEMENTS.Front;
 
   return (
-    <group
-      scale={modelScale}
-    >
+    <group scale={modelScale}>
       {/* =================================================
           ACTUAL T-SHIRT
       ================================================= */}
 
-      <primitive
-        object={model}
-      />
+      <primitive object={model} />
 
       {/* =================================================
-          ACTUAL 3D DECAL
-
-          Design is projected onto the shirt surface.
+          UPLOADED DESIGN
       ================================================= */}
 
-      {mesh && designImage && (
-        <Decal
-          mesh={mesh}
-          position={config.position}
-          rotation={config.rotation}
-          scale={config.scale}
-          map={texture}
-          transparent
-          polygonOffset
-          polygonOffsetFactor={-1}
-          depthTest
-          depthWrite={false}
-        />
+      {designImage && (
+        <Suspense fallback={null}>
+          <DesignOverlay
+            designImage={designImage}
+            position={config.position}
+            rotation={config.rotation}
+            scale={config.scale}
+          />
+        </Suspense>
       )}
     </group>
   );
@@ -262,13 +296,15 @@ function RotatingTshirt({
      * Always take shortest rotation path.
      */
     while (
-      target - current > Math.PI
+      target - current >
+      Math.PI
     ) {
       target -= Math.PI * 2;
     }
 
     while (
-      target - current < -Math.PI
+      target - current <
+      -Math.PI
     ) {
       target += Math.PI * 2;
     }
@@ -321,7 +357,6 @@ export default function TshirtViewers({
         bg-[#F5FAFF]
       "
     >
-
       {/* =================================================
           TOP LEFT
       ================================================= */}
@@ -381,10 +416,10 @@ export default function TshirtViewers({
         gl={{
           antialias: true,
           alpha: false,
+          powerPreference: "high-performance",
         }}
         shadows
       >
-
         {/* Background */}
 
         <color
@@ -396,9 +431,7 @@ export default function TshirtViewers({
             LIGHTING
         ================================================= */}
 
-        <ambientLight
-          intensity={1.7}
-        />
+        <ambientLight intensity={1.7} />
 
         <directionalLight
           position={[4, 7, 5]}
@@ -421,7 +454,6 @@ export default function TshirtViewers({
         ================================================= */}
 
         <Suspense fallback={<Loader />}>
-
           <RotatingTshirt
             modelPath={modelPath}
             designImage={designImage}
@@ -433,7 +465,6 @@ export default function TshirtViewers({
             preset="studio"
             environmentIntensity={0.8}
           />
-
         </Suspense>
 
         {/* =================================================
@@ -444,27 +475,13 @@ export default function TshirtViewers({
           enablePan={false}
           enableRotate={true}
           enableZoom={true}
-
-          /*
-           * No auto rotation.
-           * User controls the product.
-           */
           autoRotate={false}
-
           minDistance={2.4}
           maxDistance={5.5}
-
-          minPolarAngle={
-            Math.PI / 3
-          }
-
-          maxPolarAngle={
-            (Math.PI * 2) / 3
-          }
-
+          minPolarAngle={Math.PI / 3}
+          maxPolarAngle={(Math.PI * 2) / 3}
           target={[0, 0, 0]}
         />
-
       </Canvas>
 
       {/* =================================================
@@ -498,7 +515,6 @@ export default function TshirtViewers({
           360° View • Drag to rotate • Scroll to zoom
         </div>
       </div>
-
     </div>
   );
 }

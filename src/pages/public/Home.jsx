@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ProductCard from "../../components/ProductCard.jsx";
 import useProducts from "../../useProducts.js";
 
@@ -27,6 +27,7 @@ const categoryTiles = [
 ];
 
 export default function Home() {
+  const navigate = useNavigate();
   const { products, loading } = useProducts({});
   console.log("PRODUCTS:", products);
 
@@ -375,38 +376,46 @@ export default function Home() {
 
             {/* ================= BUTTON ================= */}
 
-            <Link
-              to="/login"
+            <button
+              type="button"
+              onClick={() => {
+                const loggedInUser = localStorage.getItem("karodrop-user");
+
+                if (loggedInUser) {
+                  navigate("/search");
+                } else {
+                  navigate("/login");
+                }
+              }}
               className="
-                mt-7
-                inline-flex
-                h-[60px]
-                w-full
-                max-w-[340px]
-                items-center
-                justify-center
-                gap-5
-                rounded-[10px]
-                bg-[#0078ED]
-                px-6
-                text-[15px]
-                font-bold
-                text-white
-                shadow-[0_10px_22px_rgba(0,120,237,0.20)]
-                transition-all
-                duration-300
-                hover:-translate-y-1
-                hover:bg-[#012467]
-                hover:shadow-[0_15px_30px_rgba(1,36,103,0.25)]
-              "
+    mt-7
+    inline-flex
+    h-[60px]
+    w-full
+    max-w-[340px]
+    items-center
+    justify-center
+    gap-5
+    rounded-[10px]
+    bg-[#0078ED]
+    px-6
+    text-[15px]
+    font-bold
+    text-white
+    shadow-[0_10px_22px_rgba(0,120,237,0.20)]
+    transition-all
+    duration-300
+    hover:-translate-y-1
+    hover:bg-[#012467]
+    hover:shadow-[0_15px_30px_rgba(1,36,103,0.25)]
+  "
             >
               <span>Start Dropshipping Now</span>
 
               <span className="text-[24px] font-normal">
                 →
               </span>
-            </Link>
-
+            </button>
           </div>
 
 

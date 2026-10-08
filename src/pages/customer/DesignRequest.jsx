@@ -193,7 +193,9 @@ export default function DesignRequest() {
     if (printProduct) {
       const queryColor = queryParams.get("color");
       const querySize = queryParams.get("size");
-      const queryPrinting = queryParams.get("printing");
+      const queryPrinting =
+     queryParams.get("printingMethod") ||
+     queryParams.get("printing");
 
       setSelectedColor(
         queryColor ||
