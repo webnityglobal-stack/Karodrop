@@ -4,11 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 function getUsers() {
   try {
     const savedUsers = localStorage.getItem("karodrop-users");
-
     if (!savedUsers) return [];
 
     const users = JSON.parse(savedUsers);
-
     return Array.isArray(users) ? users : [];
   } catch {
     return [];
@@ -20,7 +18,9 @@ function createUserId() {
     return window.crypto.randomUUID();
   }
 
-  return `user-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  return `user-${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2, 8)}`;
 }
 
 export default function Signup() {
@@ -29,22 +29,25 @@ export default function Signup() {
   const [form, setForm] = useState({
     name: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
-    role: "customer",
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
     setError("");
     setSuccess("");
@@ -52,406 +55,313 @@ export default function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     setError("");
     setSuccess("");
-    setLoading(true);
 
     const name = form.name.trim();
     const email = form.email.trim().toLowerCase();
+    const phone = form.phone.trim();
     const password = form.password;
     const confirmPassword = form.confirmPassword;
 
-    // Basic validation
-    if (!name || !email || !password || !confirmPassword) {
-      setError("Please fill all fields.");
-      setLoading(false);
+    if (!name || !email || !phone || !password || !confirmPassword) {
+      setError("Please fill in all fields.");
       return;
     }
 
     if (name.length < 2) {
       setError("Please enter a valid name.");
-      setLoading(false);
+      return;
+    }
+
+    // Accept a 10-digit Indian mobile number, optionally with +91.
+    const normalizedPhone = phone.replace(/[\s-]/g, "");
+    const validPhone = /^(?:\+91)?[6-9]\d{9}$/.test(normalizedPhone);
+
+    if (!validPhone) {
+      setError("Please enter a valid 10-digit mobile number.");
       return;
     }
 
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
-      setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
-      setLoading(false);
       return;
     }
 
-    const users = getUsers();
+    setLoading(true);
 
-    // Check duplicate email
-    const existingUser = users.find(
-      (user) => user?.email?.toLowerCase() === email
-    );
+    try {
+      const users = getUsers();
 
-    if (existingUser) {
-      setError("An account with this email already exists.");
+      const existingUser = users.find(
+        (user) => user?.email?.toLowerCase() === email
+      );
+
+      if (existingUser) {
+        setError("An account with this email already exists.");
+        return;
+      }
+
+      const newUser = {
+        id: createUserId(),
+        name,
+        email,
+        password,
+        phone: normalizedPhone,
+        role: "seller",
+        businessName: "",
+        address: "",
+      };
+
+      const updatedUsers = [...users, newUser];
+
+      localStorage.setItem(
+        "karodrop-users",
+        JSON.stringify(updatedUsers)
+      );
+
+      // Save the current session without including the password.
+      const currentUser = {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        phone: newUser.phone,
+        role: "seller",
+        businessName: newUser.businessName,
+        address: newUser.address,
+      };
+
+      localStorage.setItem(
+        "karodrop-user",
+        JSON.stringify(currentUser)
+      );
+
+      window.dispatchEvent(new Event("userChanged"));
+
+      setSuccess("Account created successfully. Opening your dashboard...");
+
+      setTimeout(() => {
+        navigate("/seller-dashboard", { replace: true });
+      }, 500);
+    } catch {
+      setError("Unable to create your account. Please try again.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    /*
-     * Public signup allows only:
-     * Customer or Seller.
-     *
-     * Admin accounts are not created from
-     * the public signup page.
-     */
-    const selectedRole =
-      form.role === "seller" ? "seller" : "customer";
-
-    const newUser = {
-      id: createUserId(),
-      name,
-      email,
-      password,
-      role: selectedRole,
-      phone: "",
-      businessName: "",
-      address: "",
-    };
-
-    // Save user
-    const updatedUsers = [...users, newUser];
-
-    localStorage.setItem(
-      "karodrop-users",
-      JSON.stringify(updatedUsers)
-    );
-
-    /*
-     * Save current logged-in user.
-     * Password is NOT stored here.
-     */
-    const currentUser = {
-      id: newUser.id,
-      name: newUser.name,
-      email: newUser.email,
-      role: newUser.role,
-      phone: newUser.phone,
-      businessName: newUser.businessName,
-      address: newUser.address,
-    };
-
-    localStorage.setItem(
-      "karodrop-user",
-      JSON.stringify(currentUser)
-    );
-
-    // Notify other application components
-    window.dispatchEvent(new Event("userChanged"));
-
-    setSuccess("Account created successfully!");
-
-    // After signup, take every public account type to the Home page.
-    // Dashboard remains available from the logged-in profile menu.
-    setTimeout(() => {
-      navigate("/", { replace: true });
-    }, 500);
   };
 
+  const inputClass =
+    "w-full rounded-lg border border-[#DCE7F2] bg-[#F5FAFF] px-4 py-3 text-sm text-[#0B1F3A] outline-none transition placeholder:text-[#5E6B7A]/60 focus:border-[#0078ED] focus:ring-2 focus:ring-[#0078ED]/10";
+
   return (
-    <div className="relative min-h-[80vh] overflow-hidden bg-[#F5FAFF] flex items-center justify-center px-4 py-16">
+    <main className="relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-[#F5FAFF] px-4 py-10 sm:py-14">
+      <div className="pointer-events-none absolute -bottom-40 -left-40 h-[450px] w-[450px] rounded-full bg-[#EAF4FF] opacity-90 blur-[110px]" />
+      <div className="pointer-events-none absolute -right-40 -top-40 h-[450px] w-[450px] rounded-full bg-[#EAF4FF] opacity-70 blur-[110px]" />
 
-      {/* Background Glow */}
-      <div className="pointer-events-none absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-[#EAF4FF] opacity-90 blur-[110px]" />
-
-      <div className="pointer-events-none absolute -top-40 -right-40 h-[450px] w-[450px] rounded-full bg-[#EAF4FF] opacity-70 blur-[110px]" />
-
-      <div className="relative z-10 w-full max-w-md">
-
-        {/* Heading */}
-        <div className="text-center mb-8">
-
-          <p className="text-xs font-semibold tracking-[0.25em] text-[#0078ED] uppercase mb-3">
+      <section className="relative z-10 w-full max-w-md">
+        <header className="mb-7 text-center">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-[#0078ED]">
             Create Account
           </p>
 
-          <h1 className="font-display text-4xl text-[#0B1F3A] mb-3">
+          <h1 className="mb-3 text-3xl font-bold text-[#0B1F3A] sm:text-4xl">
             Join Karodrop
           </h1>
 
-          <p className="text-sm text-[#5E6B7A]">
-            Create your account and start your journey.
+          <p className="text-sm leading-6 text-[#5E6B7A]">
+            Create your account and start your dropshipping journey.
           </p>
+        </header>
 
-        </div>
-
-        {/* Signup Card */}
-        <div className="bg-white border border-[#DCE7F2] rounded-2xl p-6 sm:p-8 shadow-[0_12px_40px_rgba(1,36,103,0.06)]">
-
+        <div className="rounded-2xl border border-[#DCE7F2] bg-white p-5 shadow-[0_12px_40px_rgba(1,36,103,0.06)] sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
-
-            {/* Name */}
             <div>
-
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-[#0B1F3A] mb-2"
+                className="mb-2 block text-sm font-medium text-[#0B1F3A]"
               >
                 Full Name
               </label>
 
               <input
                 id="name"
-                type="text"
                 name="name"
-                required
+                type="text"
                 autoComplete="name"
                 placeholder="Enter your full name"
                 value={form.name}
                 onChange={handleChange}
-                className="w-full border border-[#DCE7F2] rounded-lg px-4 py-3 text-sm bg-[#F5FAFF] text-[#0B1F3A] placeholder:text-[#5E6B7A]/60 outline-none focus:border-[#0078ED] focus:ring-2 focus:ring-[#0078ED]/10 transition"
+                required
+                className={inputClass}
               />
-
             </div>
 
-            {/* Email */}
             <div>
-
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-[#0B1F3A] mb-2"
+                className="mb-2 block text-sm font-medium text-[#0B1F3A]"
               >
                 Email Address
               </label>
 
               <input
                 id="email"
-                type="email"
                 name="email"
-                required
+                type="email"
                 autoComplete="email"
                 placeholder="Enter your email"
                 value={form.email}
                 onChange={handleChange}
-                className="w-full border border-[#DCE7F2] rounded-lg px-4 py-3 text-sm bg-[#F5FAFF] text-[#0B1F3A] placeholder:text-[#5E6B7A]/60 outline-none focus:border-[#0078ED] focus:ring-2 focus:ring-[#0078ED]/10 transition"
+                required
+                className={inputClass}
               />
-
             </div>
 
-            {/* Password */}
             <div>
+              <label
+                htmlFor="phone"
+                className="mb-2 block text-sm font-medium text-[#0B1F3A]"
+              >
+                Mobile Number
+              </label>
 
+              <div className="flex overflow-hidden rounded-lg border border-[#DCE7F2] bg-[#F5FAFF] focus-within:border-[#0078ED] focus-within:ring-2 focus-within:ring-[#0078ED]/10">
+                <span className="flex items-center border-r border-[#DCE7F2] px-3 text-sm font-medium text-[#5E6B7A]">
+                  +91
+                </span>
+
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  inputMode="numeric"
+                  autoComplete="tel-national"
+                  placeholder="10-digit mobile number"
+                  value={form.phone}
+                  onChange={handleChange}
+                  maxLength={10}
+                  pattern="[6-9][0-9]{9}"
+                  title="Enter a valid 10-digit Indian mobile number"
+                  required
+                  className="w-full min-w-0 bg-transparent px-3 py-3 text-sm text-[#0B1F3A] outline-none placeholder:text-[#5E6B7A]/60"
+                />
+              </div>
+            </div>
+
+            <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-[#0B1F3A] mb-2"
+                className="mb-2 block text-sm font-medium text-[#0B1F3A]"
               >
                 Password
               </label>
 
               <div className="relative">
-
                 <input
                   id="password"
-                  type={showPassword ? "text" : "password"}
                   name="password"
-                  required
+                  type={showPassword ? "text" : "password"}
                   autoComplete="new-password"
                   placeholder="Create a password"
                   value={form.password}
                   onChange={handleChange}
-                  className="w-full border border-[#DCE7F2] rounded-lg px-4 py-3 pr-16 text-sm bg-[#F5FAFF] text-[#0B1F3A] placeholder:text-[#5E6B7A]/60 outline-none focus:border-[#0078ED] focus:ring-2 focus:ring-[#0078ED]/10 transition"
+                  minLength={6}
+                  required
+                  className={`${inputClass} pr-16`}
                 />
 
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#5E6B7A] hover:text-[#0078ED] transition"
+                  onClick={() => setShowPassword((value) => !value)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#5E6B7A] hover:text-[#0078ED]"
                 >
                   {showPassword ? "Hide" : "Show"}
                 </button>
-
               </div>
-
             </div>
 
-            {/* Confirm Password */}
             <div>
-
               <label
                 htmlFor="confirmPassword"
-                className="block text-sm font-medium text-[#0B1F3A] mb-2"
+                className="mb-2 block text-sm font-medium text-[#0B1F3A]"
               >
                 Confirm Password
               </label>
 
               <div className="relative">
-
                 <input
                   id="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
-                  required
+                  type={showConfirmPassword ? "text" : "password"}
                   autoComplete="new-password"
                   placeholder="Confirm your password"
                   value={form.confirmPassword}
                   onChange={handleChange}
-                  className="w-full border border-[#DCE7F2] rounded-lg px-4 py-3 pr-16 text-sm bg-[#F5FAFF] text-[#0B1F3A] placeholder:text-[#5E6B7A]/60 outline-none focus:border-[#0078ED] focus:ring-2 focus:ring-[#0078ED]/10 transition"
+                  required
+                  className={`${inputClass} pr-16`}
                 />
 
                 <button
                   type="button"
                   onClick={() =>
-                    setShowConfirmPassword(!showConfirmPassword)
+                    setShowConfirmPassword((value) => !value)
                   }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#5E6B7A] hover:text-[#0078ED] transition"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#5E6B7A] hover:text-[#0078ED]"
                 >
                   {showConfirmPassword ? "Hide" : "Show"}
                 </button>
-
               </div>
-
             </div>
 
-            {/* Account Type */}
-            <div>
-
-              <label className="block text-sm font-medium text-[#0B1F3A] mb-2">
-                Account Type
-              </label>
-
-              <div className="grid grid-cols-2 gap-3">
-
-                {/* Customer */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setForm({
-                      ...form,
-                      role: "customer",
-                    });
-                    setError("");
-                    setSuccess("");
-                  }}
-                  className={`py-3 rounded-lg border text-sm font-semibold transition ${
-                    form.role === "customer"
-                      ? "border-[#0078ED] bg-[#EAF4FF] text-[#0078ED]"
-                      : "border-[#DCE7F2] bg-white text-[#5E6B7A] hover:border-[#0078ED]"
-                  }`}
-                >
-                  Customer
-                </button>
-
-                {/* Seller */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setForm({
-                      ...form,
-                      role: "seller",
-                    });
-                    setError("");
-                    setSuccess("");
-                  }}
-                  className={`py-3 rounded-lg border text-sm font-semibold transition ${
-                    form.role === "seller"
-                      ? "border-[#0078ED] bg-[#EAF4FF] text-[#0078ED]"
-                      : "border-[#DCE7F2] bg-white text-[#5E6B7A] hover:border-[#0078ED]"
-                  }`}
-                >
-                  Seller
-                </button>
-
-              </div>
-
-              {/* Account Type Description */}
-              <div className="mt-3 rounded-lg border border-[#DCE7F2] bg-[#F5FAFF] px-4 py-3">
-
-                {form.role === "seller" ? (
-                  <>
-                    <p className="text-sm font-semibold text-[#0B1F3A]">
-                      Seller Account
-                    </p>
-
-                    <p className="mt-1 text-xs leading-5 text-[#5E6B7A]">
-                      Create and manage your products, designs, brands
-                      and selling activities on Karodrop.
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-sm font-semibold text-[#0B1F3A]">
-                      Customer Account
-                    </p>
-
-                    <p className="mt-1 text-xs leading-5 text-[#5E6B7A]">
-                      Manage your brands, products, designs, orders
-                      and custom product requests.
-                    </p>
-                  </>
-                )}
-
-              </div>
-
-            </div>
-
-            {/* Error */}
             {error && (
-              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+              <p
+                role="alert"
+                className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"
+              >
                 {error}
-              </div>
+              </p>
             )}
 
-            {/* Success */}
             {success && (
-              <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600">
+              <p
+                role="status"
+                className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700"
+              >
                 {success}
-              </div>
+              </p>
             )}
 
-            {/* Signup Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#0078ED] text-white py-3.5 rounded-lg text-sm font-semibold hover:bg-[#012467] transition-colors shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full rounded-lg bg-[#0078ED] px-4 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#012467] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>
-
           </form>
 
-          {/* Divider */}
-          <div className="flex items-center gap-3 my-7">
-
-            <div className="flex-1 h-px bg-[#DCE7F2]" />
-
-            <span className="text-xs text-[#5E6B7A]/60">
-              OR
-            </span>
-
-            <div className="flex-1 h-px bg-[#DCE7F2]" />
-
+          <div className="my-6 flex items-center gap-3">
+            <div className="h-px flex-1 bg-[#DCE7F2]" />
+            <span className="text-xs text-[#5E6B7A]/60">OR</span>
+            <div className="h-px flex-1 bg-[#DCE7F2]" />
           </div>
 
-          {/* Login */}
           <p className="text-center text-sm text-[#5E6B7A]">
-
             Already have an account?{" "}
-
             <Link
               to="/login"
-              className="text-[#0078ED] font-semibold hover:text-[#012467] hover:underline transition"
+              className="font-semibold text-[#0078ED] transition hover:text-[#012467] hover:underline"
             >
               Login
             </Link>
-
           </p>
-
         </div>
-
-      </div>
-
-    </div>
+      </section>
+    </main>
   );
 }
